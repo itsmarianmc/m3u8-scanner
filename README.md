@@ -1,18 +1,18 @@
-<h1 align="center">CookieBannerBlocker</h1>
-<p align="center">Block cookie consent notices on every website and enjoy a cleaner, faster, distraction-free web experience.</p>
+<h1 align="center">M3U8 SCANNER</h1>
+<p align="center">Professionally scan all sites for M3U8 files and copy the direct link. Fast, reliable, and easy to use.p>
 
 <p align="center">
-	<img src="assets/previews/preview-google-censored-strike.png" alt="CookieBannerBlocker Hero Image" style="width:100%; height:auto;">
+	<img src="assets/previews/preview.png" alt="Logo of Radio DEEJAY, a circular black-and-white design with the text 'RADIO DEEJAY' in the center. A white curved line points from the logo to a file icon with the extension '.m3u8'." style="width:100%; height:auto;">
 </p>
 
 <h1></h1>
 
 <p align="center">
     <img height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/built-with/markdown_vector.svg">
-    <a href="https://itsmarian.is-a.dev/CookieBannerBlocker/" target="_blank">
+    <a href="https://itsmarian.is-a.dev/m3u8-scanner/" target="_blank">
         <img height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/readthedocs_vector.svg">
     </a>
-    <a href="https://itsmarian.is-a.dev/CookieBannerBlocker/" target="_blank">
+    <a href="https://itsmarian.is-a.dev/m3u8-scanner/" target="_blank">
         <img height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/website_vector.svg">
     </a>
 </p>
@@ -33,24 +33,28 @@
 <h3>Features:</h3>
 <ul>
 	<li>
-		<strong>Automatic Blocking:</strong>
-		Detects and blocks cookie banners automatically on all visited websites
+		<strong>Deep Scanning:</strong>
+		Automatically scans web pages to detect and extract M3U8 stream URLs.
 	</li>
 	<li>
-		<strong>Faster Loading:</strong>
-		Improves website loading times by blocking unnecessary banner scripts
+		<strong>Real-time Detection:</strong>
+		Instantly identifies M3U8 streams as you browse websites with live detection.
 	</li>
 	<li>
-		<strong>Privacy Focused:</strong>
-		Protects your privacy without compromising website functionality
+		<strong>One-Click Copy:</strong>
+		Copy M3U8 URLs directly to clipboard with a single click for easy sharing.
 	</li>
 	<li>
-		<strong>Custom Whitelist:</strong>
-		Add specific websites to your whitelist if you want to see cookie banners
+		<strong>Stream History:</strong>
+		Keep track of previously found M3U8 streams with built-in history feature.
 	</li>
 	<li>
-		<strong>Zero Configuration:</strong>
-		Works immediately after installation with no setup required
+		<strong>Privacy First:</strong>
+		No data collection or tracking - your streaming activity stays private.
+	</li>
+	<li>
+		<strong>Browser Extension:</strong>
+		Lightweight browser extension that works seamlessly across all websites.
 	</li>
 	<li>
 		<strong>100% Free:</strong>
@@ -98,68 +102,37 @@
 			<li>login.microsoftonline.com</li>
 			<li>login.live.com</li>
 		</ul>
-		<p>If you still find other sites, please <a href="https://support.itsmarian.is-a.dev/?utm_origin=https://github.com/itsmarianmc/CookieBannerBlocker/&utm_page=CookieBannerBlockerAddOn&page_pos=faq-known-sites-footer">let me know</a>
-	</details>
-	<details>
-		<summary>
-			<h3>How does Cookie Banner Blocker work?</h3>
-		</summary>
-		<p>The extension automatically detects and hides cookie consent banners using:</p>
-		<ul>
-			<li>A comprehensive list of CSS selectors that target common cookie banner implementations</li>
-			<li>CSS rules to hide known cookie banner elements</li>
-			<li>DOM removal techniques for cookie banner elements</li>
-			<li>Monitoring for dynamically loaded banners</li>
-		</ul>
+		<p>If you still find other sites, please <a href="https://support.itsmarian.is-a.dev/?utm_origin=https://github.com/itsmarianmc/M3U8/&utm_page=M3U8AddOn&page_pos=faq-known-sites-footer">let me know</a>
 	</details>
 	<details>
 		<summary>
 			<h3>Is this extension legal to use?</h3>
 		</summary>
-		<p>Cookie Banner Blocker operates legally:</p>
+		<p>M3U8 SCANNER is completely legal:</p>
 		<ul>
 			<li>It doesn't bypass paywalls or access restricted content</li>
-			<li>It simply hides visual elements like any ad blocker</li>
-			<li>Users remain responsible for complying with cookie policies</li>
-			<li>Website owners can request whitelisting</li>
+			<li>It simply scanns sites for files which you would've found if you would've digged deeper in the code or by checking the "Network" Tab in your browser</li>
+			<li>Downloading copyrighted content is strictly prohibited and is not recommended by us.</li>
 		</ul>
 	</details>
 	<details>
 		<summary>
 			<h3>Will this affect website functionality?</h3>
 		</summary>
-		<p>In most cases, no - websites function normally:</p>
-		<ul>
-			<li>Core website functionality remains unaffected</li>
-			<li>Some sites may require cookie consent for certain features</li>
-			<li>You can whitelist sites that require cookie consent</li>
-			<li>If you experience any problems related to this extension <a href="https://support.itsmarian.is-a.dev/?utm_origin=https://github.com/itsmarianmc/CookieBannerBlocker/&utm_page=CookieBannerBlockerAddOn&page_pos=faq-website-functionality-contact">contact me</a></li>
+		<p>No, websites function normally. If you experience any problems related to this extension <a href="https://support.itsmarian.is-a.dev/?utm_origin=https://github.com/itsmarianmc/M3U8SCANNER/&utm_page=M3U8SCANNERAddOn&page_pos=faq-website-functionality-contact">contact me</a></li>
 		</ul>
-	</details>
-	<details>
-		<summary>
-			<h3>How do I whitelist a website?</h3>
-		</summary>
-		<p>Whitelisting is simple:</p>
-		<ol>
-            <li>Open the extension by clicking on the top right of your screen</li>
-            <li>Clickt on "Add to whitelist"</li>
-			<li>If you want to remove a website from the whitelist, click on "Remove from whitelist"</li>
-			<li>Reload the website to apply changes</li>
-		</ol>
-		<p>Whitelisted sites will show cookie banners normally.</p>
 	</details>
 	<details>
 		<summary>
 			<h3>Does this extension collect any user data?</h3>
 		</summary>
-		<p>No, Cookie Banner Blocker is privacy-focused:</p>
+		<p>No, M3U8 SCANNER is privacy-focused:</p>
 		<ul>
 			<li>No browsing history collection</li>
 			<li>No personal data tracking</li>
 			<li>No telemetry or analytics</li>
 			<li>Open source code for complete transparency</li>
-			=> If you have further questions about privacy, please read the <a href="https://cookiebannerblocker.itsmarian.is-a.dev/legal/privacy.html">Privacy Policy</a>.</li>
+			=> If you have further questions about privacy, please read the <a href="https://m3u8scanner.itsmarian.is-a.dev/legal/privacy/">Privacy Policy</a>.</li>
 		</ul>
 	</details>
 	<details>
@@ -176,7 +149,7 @@
 	</details>
 	<details>
 		<summary>
-			<h3>How often is the blocker updated?</h3>
+			<h3>How often is the scanner updated?</h3>
 		</summary>
 		<p>I maintain regular update cycles:</p>
 		<ul>
@@ -189,19 +162,15 @@
 		<summary>
 			<h3>Can website owners detect this extension?</h3>
 		</summary>
-		<p>Detection is possible but unlikely:</p>
-		<ul>
-			<li>The addon doesn't leave obvious traces of its presence</li>
-			<li>Some sophisticated sites may detect hidden elements</li>
-			<li>Website owners can request whitelisting</li>
+		<p>Detection is possible but unlikely, because the M3U8 SCANNER doesn't change any elements or update the website's code.</p>
 		</ul>
 	</details>
 	<div>
-		<p>Still have questions? <a href="https://support.itsmarian.is-a.dev/?utm_origin=https://github.com/itsmarianmc/CookieBannerBlocker/&utm_page=CookieBannerBlockerAddOn&page_pos=footer-still-questions">Contact me</a> or <a href="https://github.com/itsmarianmc/CookieBannerBlocker/issues">open an issue on GitHub</a>.</p>
+		<p>Still have questions? <a href="https://support.itsmarian.is-a.dev/?utm_origin=https://github.com/itsmarianmc/M3U8SCANNER/&utm_page=M3U8SCANNERAddOn&page_pos=footer-still-questions">Contact me</a> or <a href="https://github.com/itsmarianmc/M3U8/issues">open an issue on GitHub</a>.</p>
 	</div>
 </section>
 
 <h1></h1>
 <p align="center">
-    <span>&copy; 2025 CookieBannerBlocker Ltd. via <a href="https://github.com/itsmarianmc/">itsmarian</a> | All rights reserved.</span>
+    <span>&copy; 2025 M3U8 SCANNR Ltd. via <a href="https://github.com/itsmarianmc/">itsmarian</a> | All rights reserved.</span>
 </p>
