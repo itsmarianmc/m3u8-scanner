@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M3U8 Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/footer.css">
+    <link rel="stylesheet" href="/assets/player.css">
+    <link rel="stylesheet" href="/assets/styles.css">
+    <!-- META -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="itsmarian">
+    <meta name="description" content="M3U8 SCANNER - Professionally scan all sites for M3U8 files and copy the direct link. Fast, reliable, and easy to use.">
+    <meta name="keywords" content="m3u8 scanner, m3u8 player, play m3u8 files, m3u8a">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="itsmarian">
+    <meta property="og:description" content="M3U8 SCANNER - Professionally scan all sites for M3U8 files and copy the direct link. Fast, reliable, and easy to use.">
+    <meta property="og:image" content="https://m3u8scanner.itsmarian.is-a.dev/asstes/favicon.png">
+    <meta property="og:url" content="https://m3u8scanner.itsmarian.is-a.dev/">
+    <meta property="og:type" content="website">
+    <!-- Google tag (gtag.js) -->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-2E9SPPVJFL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-2E9SPPVJFL');
+    </script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                <i class="fas fa-play-circle"></i>
+                M3U8 SCANNER
+            </a>
+            <a href="index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                Back to Home
+            </a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="player-container">
+            <div class="player-section">
+                <div class="error-message" id="error"></div>
+                
+                <div class="video-wrapper">
+                    <video id="video" controls preload="metadata"></video>
+                </div>
+
+                <div class="controls-section">
+                    <input 
+                        type="text" 
+                        id="urlInput" 
+                        placeholder="Enter M3U8 URL..."
+                        value=""
+                    >
+                    <button class="btn-load" id="streamStarter">
+                        <i class="fas fa-play"></i>
+                        Play
+                    </button>
+                </div>
+
+                <div class="info-box">
+                    <div class="status">
+                        <div class="status-dot" id="statusDot"></div>
+                        <span id="statusText">Ready</span>
+                    </div>
+                    <span id="quality"></span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="info-card">
+                    <h3><i class="fas fa-info-circle"></i> Stream Info</h3>
+                    <div class="info-item">
+                        <span class="info-label">Resolution</span>
+                        <span class="info-value" id="resolution">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Bitrate</span>
+                        <span class="info-value" id="bitrate">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Quality Levels</span>
+                        <span class="info-value" id="levels">-</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3><i class="fas fa-link"></i> Quick Links</h3>
+                    <ul class="quick-links">
+                        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="index.html#features"><i class="fas fa-star"></i> Features</a></li>
+                        <li><a href="index.html#how-it-works"><i class="fas fa-info-circle"></i> How It Works</a></li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3><i class="fas fa-question-circle"></i> How to Use</h3>
+                    <p style="color: #8b98ab; font-size: 0.9rem; line-height: 1.6;">
+                        Use the "M3U8 extension to scan your favorite pages for m3u8 files, copy the links and enter the link here. Alternatively, you can open the player directly via the extension"
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>M3U8 SCANNER</h3>
+                    <p style="color: #8b98ab; margin-top: 1rem;">Professional m3u8 scanner and detector.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/player">m3u8 player</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/video-dev/hls.js">HLS.js Library</a></li>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement">HTML5 Video API</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Technology</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://en.wikipedia.org/wiki/HTTP_Live_Streaming">About HLS</a></li>
+                        <li><a href="https://datatracker.ietf.org/doc/html/rfc8216">M3U8 Specification</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© <span id="copyright"></span> m3u8 scanner via <a class="linkout nodecoration" href="https://github.com/itsmarianmc/">itsmarian</a> | <a class="linkout nodecoration" href="https://github.com/itsmarianmc/m3u8-scanner/blob/main/LICENSE">All rights reserved</a>.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://itsmarian-static.is-a.dev/global/copyright.js"></script>
+
+    <script>
+        let hls;
+        const video = document.getElementById('video');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const errorEl = document.getElementById('error');
+        const qualityEl = document.getElementById('quality');
+        const urlInput = document.getElementById('urlInput');
+        const resolutionEl = document.getElementById('resolution');
+        const bitrateEl = document.getElementById('bitrate');
+        const levelsEl = document.getElementById('levels');
+
+        document.getElementById('streamStarter').addEventListener('click', loadStream)
+
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        const videoSource = getUrlParameter('video_m3u8_src') || '';
+        urlInput.value = videoSource;
+
+        function showError(message) {
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+            setTimeout(() => errorEl.classList.remove('show'), 5000);
+        }
+
+        function updateStatus(text, active = false) {
+            statusText.textContent = text;
+            if (active) {
+                statusDot.classList.add('active');
+            } else {
+                statusDot.classList.remove('active');
+            }
+        }
+
+        function loadStream() {
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showError('Please enter a valid M3U8 URL');
+                return;
+            }
+
+            errorEl.classList.remove('show');
+            updateStatus('Loading...', false);
+            resolutionEl.textContent = '-';
+            bitrateEl.textContent = '-';
+            levelsEl.textContent = '-';
+
+            if (hls) {
+                hls.destroy();
+            }
+
+            if (Hls.isSupported()) {
+                hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                });
+
+                hls.loadSource(url);
+                hls.attachMedia(video);
+
+                hls.on(Hls.Events.MANIFEST_PARSED, function(event, data) {
+                    updateStatus('Stream Active', true);
+                    levelsEl.textContent = data.levels.length;
+                    qualityEl.textContent = `${data.levels.length} quality levels`;
+                    video.play().catch(e => {
+                        console.log('Autoplay prevented:', e);
+                        updateStatus('Ready to Play', false);
+                    });
+                });
+
+                hls.on(Hls.Events.ERROR, function(event, data) {
+                    if (data.fatal) {
+                        switch(data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                showError('Network error loading stream');
+                                updateStatus('Error', false);
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                showError('Media error - attempting recovery...');
+                                hls.recoverMediaError();
+                                break;
+                            default:
+                                showError('Fatal error loading stream');
+                                updateStatus('Error', false);
+                                break;
+                        }
+                    }
+                });
+
+                hls.on(Hls.Events.LEVEL_SWITCHED, function(event, data) {
+                    const level = hls.levels[data.level];
+                    resolutionEl.textContent = `${level.height}p`;
+                    bitrateEl.textContent = `${Math.round(level.bitrate / 1000)} kbps`;
+                    qualityEl.textContent = `${level.height}p @ ${Math.round(level.bitrate / 1000)} kbps`;
+                });
+
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+                video.addEventListener('loadedmetadata', function() {
+                    updateStatus('Stream Active', true);
+                    video.play().catch(e => {
+                        console.log('Autoplay prevented:', e);
+                        updateStatus('Ready to Play', false);
+                    });
+                });
+                video.addEventListener('error', function() {
+                    showError('Error loading stream');
+                    updateStatus('Error', false);
+                });
+            } else {
+                showError('Your browser does not support HLS');
+                updateStatus('Not Supported', false);
+            }
+            video.volume = 0.25;
+        }
+
+        loadStream();
+
+        urlInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loadStream();
+            }
+        });
+    </script>
+</body>
+</html>

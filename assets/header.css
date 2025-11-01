@@ -1,0 +1,254 @@
+:root {
+    --primary: #1a1a1a;
+    --secondary: #2d2d2d;
+    --accent: #00b894;
+    --accent-hover: #00a885;
+    --text: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --background: #121212;
+    --card-bg: #1e1e1e;
+    --border: #333;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --transition: all 0.3s ease;
+}
+
+header {
+    background: var(--primary);
+    border-bottom: 1px solid var(--border);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    padding: 1rem 0;
+	transition: all 0.3s ease-in-out;
+}
+
+header.scrolled {
+	padding: 2rem 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    gap: 12px;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-icon {
+    background-image: url(favicon.png);
+    background-position: center;
+    background-size: cover;
+    border-radius: 12px;
+    height: 40px;
+    width: 40px;
+}
+
+.logo-text {
+    align-items: center;
+    color: var(--text);
+    display: flex;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    height: 40px;
+}
+
+.logo-text span {
+    color: var(--accent);
+}
+
+.logo-big {
+    display: block;
+}
+
+.logo-small {
+    display: none;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: var(--text);
+    text-decoration: none;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
+.header-nav-link a {
+    font-size: 1.3rem !important;
+}
+
+.mobile-li {
+    display: none;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-buttons .btn {
+    background: var(--accent);
+    color: var(--primary);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-buttons .btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    height: 37.5px;
+    margin: 1.25px;
+    width: 37.5px;
+}
+
+.menu-icon {
+    height: 37.5px;
+    position: relative;
+    width: 37.5px;
+}
+
+.line {
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: var(--text);
+    border-radius: 4px;
+    left: 0;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.line-1 {
+    top: 0;
+}
+
+.line-2 {
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 1;
+}
+
+.line-3 {
+    bottom: 0;
+}
+
+.active .line-1 {
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.active .line-2 {
+    opacity: 0;
+    transform: translateY(-50%) scaleX(0);
+}
+
+.active .line-3 {
+    bottom: 50%;
+    transform: translateY(50%) rotate(-45deg);
+}
+
+@media (max-width: 1095px) {
+    .nav-buttons {
+        display: none;
+    }
+}
+
+@media (max-width: 933px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 73px;
+        right: -100%;
+        flex-direction: column;
+        background: var(--primary);
+        width: 80%;
+        height: calc(100vh - 80px);
+        padding: 40px 20px;
+        transition: var(--transition);
+        box-shadow: -5px 0 15px var(--shadow);
+        border-left: 1px solid var(--border);
+    }
+
+    .nav-links.active {
+        right: 0;
+    }
+
+	header.scrolled .nav-links {
+		top: 105px;
+	}
+
+    .mobile-li {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-big {
+        display: none;
+    }
+
+    .logo-small {
+        display: block;
+    }
+}
+
+.linkout {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.nodecoration {
+    text-decoration: none;
+    color: inherit;
+}
+
+.nodecoration:hover {
+    text-decoration: underline;
+}

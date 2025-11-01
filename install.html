@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M3U8 SCANNER - Installation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/install.css">
+    <link rel="stylesheet" href="/assets/footer.css">
+    <!-- META -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="itsmarian">
+    <meta name="description" content="M3U8 SCANNER - Professionally scan all sites for M3U8 files and copy the direct link. Fast, reliable, and easy to use.">
+    <meta name="keywords" content="m3u8 scanner, m3u8 player, play m3u8 files, m3u8a">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="itsmarian">
+    <meta property="og:description" content="M3U8 SCANNER - Professionally scan all sites for M3U8 files and copy the direct link. Fast, reliable, and easy to use.">
+    <meta property="og:image" content="https://m3u8scanner.itsmarian.is-a.dev/asstes/favicon.png">
+    <meta property="og:url" content="https://m3u8scanner.itsmarian.is-a.dev/">
+    <meta property="og:type" content="website">
+    <!-- Google tag (gtag.js) -->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-2E9SPPVJFL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-2E9SPPVJFL');
+    </script>
+</head>
+<body>
+    <div class="content">
+        <div class="message" id="msg-container"></div>
+    </div>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>M3U8 SCANNER</h3>
+                    <p style="color: #8b98ab; margin-top: 1rem;">Professional m3u8 scanner and detector.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/player">m3u8 player</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/video-dev/hls.js">HLS.js Library</a></li>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement">HTML5 Video API</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Technology</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://en.wikipedia.org/wiki/HTTP_Live_Streaming">About HLS</a></li>
+                        <li><a href="https://datatracker.ietf.org/doc/html/rfc8216">M3U8 Specification</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© <span id="copyright"></span> m3u8 scanner via <a class="linkout nodecoration" href="https://github.com/itsmarianmc/">itsmarian</a> | <a class="linkout nodecoration" href="https://github.com/itsmarianmc/m3u8-acanner/blob/main/LICENSE">All rights reserved</a>.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://itsmarian-static.is-a.dev/global/copyright.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const msgContainer = document.getElementById('msg-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.has('install') && 
+                urlParams.get('install') === 'success' &&
+                urlParams.has('version')) {
+                
+                const version = urlParams.get('version');
+                const extensionId = urlParams.get('chrome-runtime-id') || 'N/A';
+                
+                msgContainer.className = 'message success-message';
+                msgContainer.innerHTML = `
+                    <div class="message-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2 class="message-title">Installation Successful!</h2>
+                    <div class="message-content">
+                        <p>M3U8 SCANNER v${version} has been successfully installed.</p>
+                        <div class="version-info">
+                            <div>Version: ${version}</div>
+                            <div>Extension ID: ${extensionId}</div>
+                        </div>
+                        <p>You can now stream M3U8 videos with ease. Thanks for installing M3U8 SCANNER!</p>
+                    </div>
+                    <div class="message-actions">
+                        <a href="/" class="btn btn-primary">
+                            <i class="fas fa-globe"></i>
+                            Visit Website
+                        </a>
+                        <a href="http://github.com/itsmarianmc/m3u8-scanner/" class="btn btn-outline">
+                            <i class="fa-brands fa-github"></i>
+                            GitHub Repository
+                        </a>
+                    </div>
+                `;
+            } else if (urlParams.has('throw') && urlParams.get('throw') === 'error') {
+                const errorType = urlParams.get('error_type') || 'Unknown Error';
+                const errorDesc = urlParams.get('error_description') || 'An unexpected error occurred.';
+                const actions = urlParams.get('actions') || 'Please try again later.';
+                
+                msgContainer.className = 'message error-message';
+                msgContainer.innerHTML = `
+                    <div class="message-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h2 class="message-title">Error: ${errorType}</h2>
+                    <div class="message-content">
+                        <p>${decodeURIComponent(errorDesc)}</p>
+                        <p><strong>Recommended actions:</strong> ${decodeURIComponent(actions)}</p>
+                    </div>
+                    <div class="message-actions">
+                        <a href="/" class="btn btn-primary error">
+                            <i class="fas fa-home"></i>
+                            Back to Home
+                        </a>
+                    </div>
+                `;
+            } else {
+                msgContainer.className = 'message';
+                msgContainer.innerHTML = `
+                    <div class="message-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <h2 class="message-title">M3U8 SCANNER</h2>
+                    <div class="message-content">
+                        <p>Professionally scan all sites for M3U8 files and copy the direct link. Fast, reliable, and easy to use.</p>
+                        <p>Stream M3U8 playlists with adaptive quality and full browser support.</p>
+                    </div>
+                    <div class="message-actions">
+                        <a href="/" class="btn btn-primary">
+                            <i class="fas fa-globe"></i>
+                            Visit Website
+                        </a>
+                        <a href="http://github.com/itsmarianmc/m3u8-scanner/" class="btn btn-outline">
+                            <i class="fa-brands fa-github"></i>
+                            GitHub Repository
+                        </a>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

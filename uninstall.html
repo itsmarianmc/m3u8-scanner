@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M3U8 SCANNER - Uninstall Feedback</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/uninstall.css">
+    <link rel="stylesheet" href="/assets/footer.css">
+    <!-- META -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="itsmarian">
+    <meta name="description" content="M3U8 SCANNER - Professionally scan all sites for M3U8 files and copy the direct link. Fast, reliable, and easy to use.">
+    <meta name="keywords" content="m3u8 scanner, m3u8 player, play m3u8 files, m3u8a">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="itsmarian">
+    <meta property="og:description" content="M3U8 SCANNER - Professionally scan all sites for M3U8 files and copy the direct link. Fast, reliable, and easy to use.">
+    <meta property="og:image" content="https://m3u8scanner.itsmarian.is-a.dev/asstes/favicon.png">
+    <meta property="og:url" content="https://m3u8scanner.itsmarian.is-a.dev/">
+    <meta property="og:type" content="website">
+    <!-- Google tag (gtag.js) -->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-2E9SPPVJFL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-2E9SPPVJFL');
+    </script>
+</head>
+<body>
+    <div class="content">
+        <div class="feedback-form" id="feedbackForm">
+            <h1 class="form-title">We're Sorry to See You Go 😢</h1>
+            <p class="form-description">
+                Your feedback helps us improve M3U8 Scanner for everyone.<br>
+                Please tell us why you're uninstalling:
+            </p>
+            <form id="uninstallForm">
+                <input type="hidden" id="version" name="version" value="">
+
+                <div class="reasons-grid">
+                    <label class="reason-item">
+                        <input type="checkbox" name="reasons" value="difficult_use">
+                        <span class="reason-text">Difficult to use</span>
+                    </label>
+                    <label class="reason-item">
+                        <input type="checkbox" name="reasons" value="alternative">
+                        <span class="reason-text">Found a better alternative</span>
+                    </label>
+                    <label class="reason-item">
+                        <input type="checkbox" name="reasons" value="no_longer_needed">
+                        <span class="reason-text">No longer need it</span>
+                    </label>
+                    <label class="reason-item">
+                        <input type="checkbox" name="reasons" value="not_working">
+                        <span class="reason-text">Not working properly</span>
+                    </label>
+                    <label class="reason-item">
+                        <input type="checkbox" name="reasons" value="performance">
+                        <span class="reason-text">Performance issues</span>
+                    </label>
+                    <label class="reason-item">
+                        <input type="checkbox" name="reasons" value="missing_features">
+                        <span class="reason-text">Missing features</span>
+                    </label>
+                    <label class="reason-item">
+                        <input type="checkbox" name="reasons" value="compatibility">
+                        <span class="reason-text">Compatibility problems</span>
+                    </label>
+                    <label class="reason-item">
+                        <input type="checkbox" name="reasons" value="other">
+                        <span class="reason-text">Other reason</span>
+                    </label>
+                </div>
+                
+                <div class="textarea-group">
+                    <label for="comments">Additional comments (optional):</label>
+                    <textarea id="comments" name="comments" placeholder="Please share any additional feedback or suggestions..."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    Submit Feedback
+                </button>
+                
+                <div id="errorMessage" class="error-message hidden"></div>
+            </form>
+        </div>
+
+        <div class="thank-you-message hidden" id="thankYouMessage">
+            <div class="thank-you-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h2 class="form-title">Thank You! ❤️</h2>
+            <p class="form-description">
+                Your feedback has been received and will help us improve.<br>
+                We hope to see you again in the future!
+            </p>
+            <div class="message-actions">
+                <a href="index.html" class="btn-outline">
+                    <i class="fas fa-home"></i>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>M3U8 Scanner</h3>
+                    <p style="color: #8b98ab; margin-top: 1rem;">Professional m3u8 scanner and detector.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/player">m3u8 player</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/video-dev/hls.js">HLS.js Library</a></li>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement">HTML5 Video API</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Technology</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://en.wikipedia.org/wiki/HTTP_Live_Streaming">About HLS</a></li>
+                        <li><a href="https://datatracker.ietf.org/doc/html/rfc8216">M3U8 Specification</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© <span id="copyright"></span> m3u8 scanner via <a class="linkout nodecoration" href="https://github.com/itsmarianmc/">itsmarian</a> | <a class="linkout nodecoration" href="https://github.com/itsmarianmc/m3u8-scanner/blob/main/LICENSE">All rights reserved</a>.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://itsmarian-static.is-a.dev/global/copyright.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('uninstallForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const errorMessage = document.getElementById('errorMessage');
+            const feedbackForm = document.getElementById('feedbackForm');
+            const thankYouMessage = document.getElementById('thankYouMessage');
+            const versionField = document.getElementById('version');
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const version = urlParams.get('version') || 'unknown';
+            versionField.value = version;
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                const reasons = [];
+                const checkboxes = form.querySelectorAll('input[name="reasons"]:checked');
+                
+                checkboxes.forEach(checkbox => {
+                    reasons.push(checkbox.value);
+                });
+
+                const comments = formData.get('comments') || '';
+                const version = formData.get('version') || 'unknown';
+
+                if (reasons.length === 0) {
+                    showError('Please select at least one reason for uninstalling.');
+                    return;
+                }
+
+                const data = {
+                    reasons: reasons,
+                    comments: comments,
+                    version: version,
+                    timestamp: new Date().toISOString(),
+                    userAgent: navigator.userAgent
+                };
+
+                await submitFeedback(data);
+            });
+
+            async function submitFeedback(data) {
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                    errorMessage.classList.add('hidden');
+
+                    // Simulate API call - replace with your actual endpoint
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    // Success
+                    feedbackForm.classList.add('hidden');
+                    thankYouMessage.classList.remove('hidden');
+
+                    // Log data for debugging
+                    console.log('Feedback submitted:', data);
+
+                } catch (error) {
+                    console.error('Error submitting feedback:', error);
+                    showError('Sorry, there was an error submitting your feedback. Please try again.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Feedback';
+                }
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.classList.remove('hidden');
+            }
+
+            document.getElementById('comments').addEventListener('input', function(e) {
+                const otherCheckbox = document.querySelector('input[value="other"]');
+                if (e.target.value.trim() !== '' && !otherCheckbox.checked) {
+                    otherCheckbox.checked = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
