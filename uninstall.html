@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/assets/favicon.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M3U8 SCANNER - Uninstall Feedback</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -39,7 +40,6 @@
             </p>
             <form id="uninstallForm">
                 <input type="hidden" id="version" name="version" value="">
-
                 <div class="reasons-grid">
                     <label class="reason-item">
                         <input type="checkbox" name="reasons" value="difficult_use">
@@ -74,21 +74,17 @@
                         <span class="reason-text">Other reason</span>
                     </label>
                 </div>
-                
                 <div class="textarea-group">
                     <label for="comments">Additional comments (optional):</label>
                     <textarea id="comments" name="comments" placeholder="Please share any additional feedback or suggestions..."></textarea>
                 </div>
-                
                 <button type="submit" class="submit-btn" id="submitBtn">
                     <i class="fas fa-paper-plane"></i>
                     Submit Feedback
                 </button>
-                
                 <div id="errorMessage" class="error-message hidden"></div>
             </form>
         </div>
-
         <div class="thank-you-message hidden" id="thankYouMessage">
             <div class="thank-you-icon">
                 <i class="fas fa-heart"></i>
@@ -106,8 +102,6 @@
             </div>
         </div>
     </div>
-
-    
     <footer>
         <div class="footer-content">
             <div class="footer-grid">
@@ -115,7 +109,6 @@
                     <h3>M3U8 Scanner</h3>
                     <p style="color: #8b98ab; margin-top: 1rem;">Professional m3u8 scanner and detector.</p>
                 </div>
-                
                 <div class="footer-col">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
@@ -124,7 +117,6 @@
                         <li><a href="#how-it-works">How It Works</a></li>
                     </ul>
                 </div>
-                
                 <div class="footer-col">
                     <h3>Resources</h3>
                     <ul class="footer-links">
@@ -133,7 +125,6 @@
                         <li><a href="/privacy">Privacy Policy</a></li>
                     </ul>
                 </div>
-                
                 <div class="footer-col">
                     <h3>Technology</h3>
                     <ul class="footer-links">
@@ -142,14 +133,12 @@
                     </ul>
                 </div>
             </div>
-            
             <div class="copyright">
                 <p>© <span id="copyright"></span> m3u8 scanner via <a class="linkout nodecoration" href="https://github.com/itsmarianmc/">itsmarian</a> | <a class="linkout nodecoration" href="https://github.com/itsmarianmc/m3u8-scanner/blob/main/LICENSE">All rights reserved</a>.</p>
             </div>
         </div>
     </footer>
     <script src="https://itsmarian-static.is-a.dev/global/copyright.js"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('uninstallForm');

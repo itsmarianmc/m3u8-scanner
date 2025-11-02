@@ -297,3 +297,404 @@ button {
 		width: 100%;
 	}
 }
+
+/* ============================================ */
+/* MODERN VIDEO PLAYER CONTROLS STYLES */
+/* Erstelle diese Datei als: /assets/player.css */
+/* ============================================ */
+
+/* Video Wrapper */
+.video-wrapper {
+    position: relative;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+#video {
+    width: 100%;
+    display: block;
+}
+
+/* Modern Custom Controls */
+.custom-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 60%, transparent 100%);
+    padding: 40px 20px 15px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+
+.video-wrapper:hover .custom-controls,
+.video-wrapper.playing .custom-controls {
+    opacity: 1;
+}
+
+/* Progress Bar Container */
+.progress-container {
+    width: 100%;
+    margin-bottom: 12px;
+    cursor: pointer;
+    padding: 8px 0;
+}
+
+.progress-bar-wrapper {
+    position: relative;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    overflow: visible;
+    transition: height 0.2s;
+}
+
+.progress-container:hover .progress-bar-wrapper {
+    height: 7px;
+}
+
+.progress-buffer {
+    position: absolute;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.2s;
+}
+
+.progress-filled {
+    position: absolute;
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+.progress-handle {
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%) scale(0);
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    transition: transform 0.2s;
+}
+
+.progress-container:hover .progress-handle {
+    transform: translateY(-50%) scale(1);
+}
+
+/* Controls Row */
+.controls-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Control Buttons */
+.control-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.08);
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+}
+
+.play-pause-btn {
+    font-size: 22px;
+    min-width: 42px;
+    height: 42px;
+    background: rgba(102, 126, 234, 0.2);
+}
+
+.play-pause-btn:hover {
+    background: rgba(102, 126, 234, 0.35);
+}
+
+/* Volume Control */
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.volume-slider-wrapper {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.volume-control:hover .volume-slider-wrapper {
+    width: 80px;
+	padding: 8px;
+    opacity: 1;
+}
+
+#volumeBar {
+    width: 80px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    outline: none;
+	transform: translateY(-2.5px);
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+#volumeBar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#volumeBar::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+#volumeBar::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+/* Time Display */
+.time-display {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+    min-width: 100px;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+/* Settings Menu */
+.settings-wrapper {
+    position: relative;
+}
+
+.settings-menu {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: 0;
+    background: rgba(15, 20, 30, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 8px;
+    min-width: 180px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    transform: translateY(10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.settings-menu.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.settings-menu-title {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 10px 4px;
+    font-weight: 600;
+}
+
+.settings-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.settings-item:hover {
+    background: rgba(102, 126, 234, 0.2);
+    color: #fff;
+}
+
+.settings-item.active {
+    background: rgba(102, 126, 234, 0.15);
+    color: #667eea;
+}
+
+.settings-item i {
+    font-size: 12px;
+}
+
+/* Info Display Overlay */
+.info-overlay {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 12px 16px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    font-size: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateY(-10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 20;
+}
+
+.info-overlay.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.info-overlay-item {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+    align-items: center;
+}
+
+.info-overlay-item:last-child {
+    margin-bottom: 0;
+}
+
+.info-overlay-label {
+    color: rgba(255, 255, 255, 0.6);
+    min-width: 65px;
+}
+
+.info-overlay-value {
+    color: #667eea;
+    font-weight: 600;
+}
+
+/* Loading Spinner */
+.loading-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 15;
+}
+
+.loading-overlay.active {
+    opacity: 1;
+}
+
+@keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Spacer */
+.controls-spacer {
+    flex: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .custom-controls {
+        padding: 30px 12px 12px;
+    }
+    
+    .controls-row {
+        gap: 8px;
+    }
+    
+    .control-btn {
+        min-width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+    
+    .play-pause-btn {
+        min-width: 38px;
+        height: 38px;
+        font-size: 20px;
+    }
+    
+    .time-display {
+        font-size: 11px;
+        min-width: 85px;
+    }
+    
+    .volume-control:hover .volume-slider-wrapper {
+        width: 60px;
+    }
+    
+    #volumeBar {
+        width: 60px;
+    }
+    
+    .info-overlay {
+        font-size: 11px;
+        padding: 10px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .controls-row {
+        gap: 6px;
+    }
+    
+    .control-btn {
+        min-width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+    
+    .play-pause-btn {
+        min-width: 34px;
+        height: 34px;
+        font-size: 18px;
+    }
+}
