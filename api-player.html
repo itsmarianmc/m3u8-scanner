@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M3U8 OBS Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #000;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .error-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 5px;
+            z-index: 10;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 18px;
+            z-index: 5;
+            display: none;
+        }
+        
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        .loading-overlay::after {
+            content: "Loading...";
+        }
+    </style>
+</head>
+<body>
+    <video id="video" preload="metadata" muted></video>
+    <div class="error-message" id="error"></div>
+    <div class="loading-overlay" id="loadingOverlay"></div>
+
+    <script>
+        let hls;
+        const video = document.getElementById('video');
+        const errorEl = document.getElementById('error');
+        const loadingOverlayEl = document.getElementById('loadingOverlay');
+
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const value = urlParams.get(name);
+            return value;
+        }
+
+        function formatTime(time) {
+            if (isNaN(time)) return '00:00';
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60);
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function showError(message) {
+            errorEl.innerHTML = message;
+            errorEl.classList.add('show');
+            setTimeout(() => errorEl.classList.remove('show'), 5000);
+        }
+
+        function showLoading(show) {
+            if (show) {
+                loadingOverlayEl.classList.add('active');
+            } else {
+                loadingOverlayEl.classList.remove('active');
+            }
+        }
+
+        function setupAutoSkip(intervalSeconds) {
+            if (!intervalSeconds || intervalSeconds <= 0) return;
+            
+            setInterval(() => {
+                if (video.duration && !isNaN(video.duration)) {
+                    const skipToTime = Math.max(0, video.duration - 5);
+                    video.currentTime = skipToTime;
+                }
+            }, intervalSeconds * 1000);
+        }
+
+        function loadStream() {
+            const videoSource = getUrlParameter('video_m3u8_src');
+            const autoplay = getUrlParameter('autoplay') === 'true';
+            const autoskipToLatest = getUrlParameter('autoskip_to_latest') === 'true';
+            const autoskipInterval = parseInt(getUrlParameter('autoskip_interval')) || 0;
+            const mutedParam = getUrlParameter('muted');
+            const muted = mutedParam === null || mutedParam === 'true';
+            
+            if (!videoSource) {
+                showError('No M3U8 URL provided. Use ?video_m3u8_src=URL parameter. <br> Check to separate multiple paramters with & symbol and not ? again.');
+                return;
+            }
+
+            errorEl.classList.remove('show');
+            showLoading(true);
+
+            if (hls) {
+                hls.destroy();
+            }
+
+            if (Hls.isSupported()) {
+                hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                });
+
+                hls.loadSource(videoSource);
+                hls.attachMedia(video);
+
+                hls.on(Hls.Events.MANIFEST_PARSED, function(event, data) {
+                    showLoading(false);
+                    
+                    video.muted = muted;
+                    
+                    if (autoskipToLatest && autoskipInterval > 0) {
+                        setupAutoSkip(autoskipInterval);
+                    }
+                    
+                    if (autoplay) {
+                        video.play().catch(e => {
+                            console.log('Autoplay prevented:', e);
+                        });
+                    }
+                });
+
+                hls.on(Hls.Events.ERROR, function(event, data) {
+                    if (data.fatal) {
+                        showLoading(false);
+                        switch(data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                showError('Network error loading stream');
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                showError('Media error - attempting recovery...');
+                                hls.recoverMediaError();
+                                break;
+                            default:
+                                showError('Fatal error loading stream');
+                                break;
+                        }
+                    }
+                });
+
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = videoSource;
+                video.addEventListener('loadedmetadata', function() {
+                    showLoading(false);
+                    
+                    video.muted = muted;
+                    
+                    if (autoskipToLatest && autoskipInterval > 0) {
+                        setupAutoSkip(autoskipInterval);
+                    }
+                    
+                    if (autoplay) {
+                        video.play().catch(e => {
+                            console.log('Autoplay prevented:', e);
+                        });
+                    }
+                });
+                video.addEventListener('error', function() {
+                    showError('Error loading stream');
+                    showLoading(false);
+                });
+            } else {
+                showError('Your browser does not support HLS');
+                showLoading(false);
+            }
+            
+            if (!muted) {
+                video.volume = 0.25;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadStream);
+    </script>
+</body>
+</html>

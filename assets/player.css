@@ -157,6 +157,7 @@ button {
 	padding: 12px 16px;
 	display: flex;
 	justify-content: space-between;
+    margin-bottom: 1rem;
 	align-items: center;
 	font-size: 12px;
 	color: #8b98ab;
@@ -221,6 +222,14 @@ button {
 	border: 1px solid #2a2e38;
 	border-radius: 12px;
 	padding: 1.5rem;
+    word-break: break-word;
+}
+
+.info-card div {
+    color: #8b98ab;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-top: 5px;
 }
 
 .info-card h3 {
