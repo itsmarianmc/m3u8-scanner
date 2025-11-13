@@ -7,30 +7,7 @@
     <title>M3U8 Player</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/assets/footer.css">
     <link rel="stylesheet" href="/assets/player.css">
-    <link rel="stylesheet" href="/assets/styles.css">
-    <!-- META -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="author" content="itsmarian">
-    <meta name="description" content="M3U8 SCANNER - Professionally scan all sites for M3U8 files and copy the direct link. Fast, reliable, and easy to use.">
-    <meta name="keywords" content="m3u8 scanner, m3u8 player, play m3u8 files, m3u8a">
-    <meta name="referrer" content="no-referrer">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="itsmarian">
-    <meta property="og:description" content="M3U8 SCANNER - Professionally scan all sites for M3U8 files and copy the direct link. Fast, reliable, and easy to use.">
-    <meta property="og:image" content="https://m3u8scanner.itsmarian.is-a.dev/asstes/favicon.png">
-    <meta property="og:url" content="https://m3u8scanner.itsmarian.is-a.dev/">
-    <meta property="og:type" content="website">
-    <!-- Google tag (gtag.js) -->
-    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-2E9SPPVJFL"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-2E9SPPVJFL');
-    </script>
 </head>
 <body>
     <header>
@@ -45,6 +22,7 @@
             </a>
         </nav>
     </header>
+    
     <div class="main-content">
         <div class="player-container">
             <div class="player-section">
@@ -52,18 +30,72 @@
                 <div class="video-wrapper">
                     <video id="video" preload="metadata"></video>
                     <div class="loading-overlay" id="loadingOverlay"></div>
-                    <div class="info-overlay" id="infoOverlay">
-                        <div class="info-overlay-item">
-                            <span class="info-overlay-label">Qualität:</span>
-                            <span class="info-overlay-value" id="infoQuality">-</span>
+                    <div class="stats-overlay" id="statsOverlay">
+                        <div class="stats-panel">
+                            <small>Video Info</small>
+                            <div class="stats-row">
+                                <div class="stats-item">
+                                    <div class="stats-label">Video ID</div>
+                                    <div class="stats-value" id="videoId">—</div>
+                                </div>
+                                <div class="stats-item">
+                                    <div class="stats-label">Viewport / FPS</div>
+                                    <div class="stats-value" id="viewportFrames">—</div>
+                                </div>
+                                <div class="stats-item">
+                                    <div class="stats-label">Current / Optimal Res</div>
+                                    <div class="stats-value" id="res">—</div>
+                                </div>
+                                <div class="stats-item">
+                                    <div class="stats-label">Codecs</div>
+                                    <div class="stats-value" id="codecs">—</div>
+                                </div>
+                            </div>
+                            <small style="margin-top: 8px">Playback</small>
+                            <div class="stats-row">
+                                <div class="stats-item">
+                                    <div class="stats-label">Volume / Normalized</div>
+                                    <div class="stats-value" id="volumeStats">—</div>
+                                </div>
+                                <div class="stats-item">
+                                    <div class="stats-label">Connection Speed</div>
+                                    <div class="stats-value" id="connSpeed">—</div>
+                                    <div class="stats-bar"><i id="connBar"></i></div>
+                                </div>
+                                <div class="stats-item">
+                                    <div class="stats-label">Buffer Health</div>
+                                    <div class="stats-value" id="bufferHealth">—</div>
+                                    <div class="stats-bar"><i id="bufferBar"></i></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="info-overlay-item">
-                            <span class="info-overlay-label">Bitrate:</span>
-                            <span class="info-overlay-value" id="infoBitrate">-</span>
-                        </div>
-                        <div class="info-overlay-item">
-                            <span class="info-overlay-label">Buffer:</span>
-                            <span class="info-overlay-value" id="infoBuffer">-</span>
+                        <div class="stats-panel small-right">
+                            <small>Diagnostics</small>
+                            <div class="stats-row" style="justify-content: flex-end;">
+                                <div class="stats-item">
+                                    <div class="stats-label">Network Activity</div>
+                                    <div class="stats-value" id="netActivity">—</div>
+                                </div>
+                                <div class="stats-item">
+                                    <div class="stats-label">Volume (LUFS est.)</div>
+                                    <div class="stats-value" id="lufs">—</div>
+                                </div>
+                                <div class="stats-item">
+                                    <div class="stats-label">Color</div>
+                                    <div class="stats-value" id="color">—</div>
+                                </div>
+                                <div class="stats-item">
+                                    <div class="stats-label">Date</div>
+                                    <div class="stats-value" id="date">—</div>
+                                </div>
+                            </div>
+                            <small style="margin-top: 8px">Codec / Frames stats</small>
+                            <div style="margin-top: 8px">
+                                <div class="stats-label">Decoded frames</div>
+                                <div class="stats-value" id="framesDecoded">—</div>
+                                <div class="stats-label" style="margin-top: 6px">Dropped frames</div>
+                                <div class="stats-value" id="framesDropped">—</div>
+                            </div>
                         </div>
                     </div>
                     <div class="custom-controls">
@@ -139,17 +171,13 @@
                     </div>
                 </div>
                 <div class="controls-section">
-                    <input 
-                        type="text" 
-                        id="urlInput" 
-                        placeholder="Enter M3U8 URL..."
-                        value=""
-                    >
+                    <input type="text" id="urlInput" placeholder="Enter M3U8 URL..."value="">
                     <button class="btn-load" id="streamStarter">
                         <i class="fas fa-play"></i>
                         Play
                     </button>
                 </div>
+                
                 <div class="info-box">
                     <div class="status">
                         <div class="status-dot" id="statusDot"></div>
@@ -157,9 +185,11 @@
                     </div>
                     <span id="quality"></span>
                 </div>
+                
                 <div class="info-card" style="margin-top: auto;">
                     <h3><i class="fas fa-plug"></i> Use API</h3>
                     <p>
+                        </p>
                         <div>
                             <a><code>?video_m3u8_src=URL</code>: Plays the video from URL (required)</a>
                         </div>
@@ -179,7 +209,7 @@
                                 To autoplay audio automatically, you need to set "Sound" in <code>chrome://settings/content/siteDetails?site=https%3A%2F%2Fm3u8scanner.itsmarian.is-a.dev</code> to "Allow".
                             </a>
                         </div>
-                    </p>
+                    <p></p>
                 </div>
             </div>
             <div class="sidebar">
@@ -201,9 +231,10 @@
                 <div class="info-card">
                     <h3><i class="fas fa-link"></i> Quick Links</h3>
                     <ul class="quick-links">
-                        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-                        <li><a href="index.html#features"><i class="fas fa-star"></i> Features</a></li>
-                        <li><a href="index.html#how-it-works"><i class="fas fa-info-circle"></i> How It Works</a></li>
+                        <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="/#features"><i class="fas fa-star"></i> Features</a></li>
+                        <li><a href="/#how-it-works"><i class="fas fa-info-circle"></i> How It Works</a></li>
+                        <li><a href="/#download"><i class="fas fa-info-download"></i> Download Extension</a></li>
                     </ul>
                 </div>
                 <div class="info-card">
@@ -215,45 +246,6 @@
             </div>
         </div>
     </div>
-    <footer>
-        <div class="footer-content">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h3>M3U8 SCANNER</h3>
-                    <p style="color: #8b98ab; margin-top: 1rem;">Professional m3u8 scanner and detector.</p>
-                </div>
-                <div class="footer-col">
-                    <h3>Quick Links</h3>
-                    <ul class="footer-links">
-                        <li><a href="/player">m3u8 player</a></li>
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#how-it-works">How It Works</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3>Resources</h3>
-                    <ul class="footer-links">
-                        <li><a href="https://github.com/video-dev/hls.js">HLS.js Library</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement">HTML5 Video API</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3>Technology</h3>
-                    <ul class="footer-links">
-                        <li><a href="https://en.wikipedia.org/wiki/HTTP_Live_Streaming">About HLS</a></li>
-                        <li><a href="https://datatracker.ietf.org/doc/html/rfc8216">M3U8 Specification</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <span>Please note that downloading and redistributing (downloaded) copyrighted content is prohibited and violates federal law. This extension is ONLY for finding (scanning) m3u8 files and not for downloading these streams!</span>
-                <br>
-                <p>© <span id="copyright"></span> m3u8 scanner via <a class="linkout nodecoration" href="https://github.com/itsmarianmc/">itsmarian</a> | <a class="linkout nodecoration" href="https://github.com/itsmarianmc/m3u8-scanner/blob/main/LICENSE">All rights reserved</a>.</p>
-            </div>
-        </div>
-    </footer>
-    <script src="https://itsmarian-static.is-a.dev/global/copyright.js"></script>
     <script>
         let hls;
         const video = document.getElementById('video');
@@ -265,6 +257,170 @@
         const resolutionEl = document.getElementById('resolution');
         const bitrateEl = document.getElementById('bitrate');
         const levelsEl = document.getElementById('levels');
+
+        const statsOverlay = document.getElementById('statsOverlay');
+        const statsIds = {
+            videoId: document.getElementById('videoId'),
+            viewportFrames: document.getElementById('viewportFrames'),
+            res: document.getElementById('res'),
+            codecs: document.getElementById('codecs'),
+            volumeStats: document.getElementById('volumeStats'),
+            connSpeed: document.getElementById('connSpeed'),
+            connBar: document.getElementById('connBar'),
+            bufferHealth: document.getElementById('bufferHealth'),
+            bufferBar: document.getElementById('bufferBar'),
+            netActivity: document.getElementById('netActivity'),
+            lufs: document.getElementById('lufs'),
+            color: document.getElementById('color'),
+            date: document.getElementById('date'),
+            framesDecoded: document.getElementById('framesDecoded'),
+            framesDropped: document.getElementById('framesDropped')
+        };
+
+        const secs = s => (isFinite(s) ? s.toFixed(2) + 's' : '—');
+
+        function getFrameStats() {
+            try {
+                if (video.getVideoPlaybackQuality) {
+                    const q = video.getVideoPlaybackQuality();
+                    return {
+                        decoded: q.totalVideoFrames ?? '—',
+                        dropped: q.droppedVideoFrames ?? 0
+                    };
+                }
+            } catch(e) {}
+            return {decoded: '—', dropped: '—'};
+        }
+
+        function detectCodec() {
+            if (hls && hls.levels && hls.levels.length > 0) {
+                const level = hls.levels[hls.currentLevel];
+                if (level && level.videoCodec) {
+                    return level.videoCodec + (level.audioCodec ? ' / ' + level.audioCodec : '');
+                }
+            }
+            return 'HLS Stream';
+        }
+
+        function getBufferHealth() {
+            try {
+                const b = video.buffered;
+                if (!b || b.length === 0) return 0;
+                for (let i = 0; i < b.length; i++) {
+                    if (video.currentTime >= b.start(i) && video.currentTime <= b.end(i)) {
+                        return b.end(i) - video.currentTime;
+                    }
+                }
+                return b.end(b.length - 1) - video.currentTime;
+            } catch(e) { return 0; }
+        }
+
+        let audioCtx, analyser, dataArray;
+        function setupAudioAnalysis() {
+            try {
+                if (audioCtx) return;
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const src = audioCtx.createMediaElementSource(video);
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 2048;
+                src.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                dataArray = new Uint8Array(analyser.fftSize);
+            } catch(e) {
+                audioCtx = null;
+            }
+        }
+
+        function estimateLUFS() {
+            if (!analyser) return '—';
+            analyser.getByteTimeDomainData(dataArray);
+            let sum = 0;
+            for (let i = 0; i < dataArray.length; i++) {
+                const v = (dataArray[i] - 128) / 128;
+                sum += v * v;
+            }
+            const rms = Math.sqrt(sum / dataArray.length);
+            const dbfs = 20 * Math.log10(rms || 1e-8);
+            return dbfs.toFixed(1) + ' dBFS';
+        }
+
+        let lastFrameTimestamp = null;
+        let fpsEstimate = 0;
+
+        function onVideoFrame(now, metadata) {
+            if (lastFrameTimestamp !== null) {
+                const delta = (now - lastFrameTimestamp) / 1000;
+                if (delta > 0) fpsEstimate = 1 / delta;
+            }
+            lastFrameTimestamp = now;
+            if (video.requestVideoFrameCallback) {
+                video.requestVideoFrameCallback(onVideoFrame);
+            }
+        }
+
+        if (video.requestVideoFrameCallback) {
+            video.requestVideoFrameCallback(onVideoFrame);
+        }
+
+        setInterval(() => {
+            if (!statsOverlay.classList.contains('active')) return;
+
+            try {
+                statsIds.date.textContent = new Date().toLocaleString();
+
+                const vw = video.clientWidth;
+                const vh = video.clientHeight;
+                const fpsText = fpsEstimate ? Math.round(fpsEstimate) + ' fps' : '—';
+                statsIds.viewportFrames.textContent = `${vw}×${vh} / ${fpsText}`;
+
+                const curW = video.videoWidth || '—';
+                const curH = video.videoHeight || '—';
+                statsIds.res.textContent = `${curW}×${curH}`;
+
+                statsIds.codecs.textContent = detectCodec();
+
+                const vol = (video.muted ? 0 : video.volume) * 100;
+                statsIds.volumeStats.textContent = `${Math.round(vol)}% / ${video.muted ? 'muted' : 'unmuted'}`;
+
+                if (hls && hls.bandwidthEstimate) {
+                    const kbps = hls.bandwidthEstimate / 1024;
+                    statsIds.connSpeed.textContent = kbps.toFixed(0) + ' kB/s';
+                    const pct = Math.min(100, Math.round((kbps / 2000) * 100));
+                    statsIds.connBar.style.width = pct + '%';
+                } else {
+                    statsIds.connSpeed.textContent = '—';
+                    statsIds.connBar.style.width = '0%';
+                }
+
+                const bufferSec = getBufferHealth();
+                statsIds.bufferHealth.textContent = secs(bufferSec);
+                const bufferPct = Math.min(100, Math.round((bufferSec / 30) * 100));
+                statsIds.bufferBar.style.width = bufferPct + '%';
+
+                if (hls && hls.levels && hls.levels.length > 0) {
+                    const level = hls.levels[hls.currentLevel];
+                    statsIds.netActivity.textContent = `${Math.round(level.bitrate / 1024)} kbps`;
+                } else {
+                    statsIds.netActivity.textContent = '—';
+                }
+
+                if (!audioCtx) setupAudioAnalysis();
+                statsIds.lufs.textContent = estimateLUFS();
+
+                statsIds.color.textContent = 'bt709 (assumed)';
+
+                const fs = getFrameStats();
+                statsIds.framesDecoded.textContent = fs.decoded;
+                statsIds.framesDropped.textContent = fs.dropped;
+
+                if (!statsIds.videoId.textContent || statsIds.videoId.textContent === '—') {
+                    const srcName = urlInput.value.split('/').pop().split('?')[0] || 'Stream';
+                    statsIds.videoId.textContent = srcName;
+                }
+            } catch(err) {
+                console.warn('Stats update error', err);
+            }
+        }, 333);
 
         document.getElementById('streamStarter').addEventListener('click', loadStream);
 
@@ -290,42 +446,6 @@
                 statusDot.classList.remove('active');
             }
         }
-
-        function checkVideoStatus() {
-            if (!video.src && (!hls || !hls.url)) {
-                updateStatus('Ready', false);
-            } else if (video.readyState >= 3 && !video.paused) {
-                updateStatus('Stream Active', true);
-            } else if (video.readyState >= 3 && video.paused) {
-                updateStatus('Paused', false);
-            } else if (video.readyState > 0) {
-                updateStatus('Loading...', false);
-            }
-        }
-
-        video.addEventListener('playing', () => {
-            updateStatus('Stream Active', true);
-        });
-
-        video.addEventListener('pause', () => {
-            if (video.readyState >= 3) {
-                updateStatus('Paused', false);
-            }
-        });
-
-        video.addEventListener('waiting', () => {
-            updateStatus('Buffering...', false);
-        });
-
-        video.addEventListener('canplay', () => {
-            if (!video.paused) {
-                updateStatus('Stream Active', true);
-            }
-        });
-
-        video.addEventListener('ended', () => {
-            updateStatus('Ended', false);
-        });
 
         function showLoading(show) {
             const loadingOverlayEl = document.getElementById('loadingOverlay');
@@ -368,9 +488,9 @@
                     showLoading(false);
                     levelsEl.textContent = data.levels.length;
                     qualityEl.textContent = `${data.levels.length} quality levels`;
+                    statsIds.videoId.textContent = url.split('/').pop().split('?')[0] || 'Stream';
                     video.play().catch(e => {
                         console.log('Autoplay prevented:', e);
-                        checkVideoStatus();
                     });
                 });
 
@@ -399,19 +519,13 @@
                     resolutionEl.textContent = `${level.height}p`;
                     bitrateEl.textContent = `${Math.round(level.bitrate / 1000)} kbps`;
                     qualityEl.textContent = `${level.height}p @ ${Math.round(level.bitrate / 1000)} kbps`;
-                    
-                    document.getElementById('infoQuality').textContent = `${level.height}p`;
-                    document.getElementById('infoBitrate').textContent = `${Math.round(level.bitrate / 1000)} kbps`;
                 });
 
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = url;
                 video.addEventListener('loadedmetadata', function() {
                     showLoading(false);
-                    video.play().catch(e => {
-                        console.log('Autoplay prevented:', e);
-                        checkVideoStatus();
-                    });
+                    video.play().catch(e => console.log('Autoplay prevented:', e));
                 });
                 video.addEventListener('error', function() {
                     showError('Error loading stream');
@@ -423,6 +537,7 @@
                 showLoading(false);
                 updateStatus('Not Supported', false);
             }
+            
             video.volume = 0.25;
         }
 
@@ -430,13 +545,13 @@
             loadStream();
         }
 
-        urlInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                loadStream();
-            }
+        video.addEventListener('playing', () => updateStatus('Stream Active', true));
+        video.addEventListener('pause', () => updateStatus('Paused', false));
+        video.addEventListener('waiting', () => updateStatus('Buffering...', false));
+        video.addEventListener('play', () => {
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
         });
-    </script>
-    <script>
+
         const videoWrapper = document.querySelector('.video-wrapper');
         const customControls = document.querySelector('.custom-controls');
         const playPauseBtn = document.getElementById('playPauseBtn');
@@ -453,7 +568,6 @@
         const settingsBtn = document.getElementById('settingsBtn');
         const settingsMenu = document.getElementById('settingsMenu');
         const fullscreenBtn = document.getElementById('fullscreenBtn');
-        const infoOverlayEl = document.getElementById('infoOverlay');
 
         video.addEventListener('play', () => {
             playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
@@ -480,6 +594,7 @@
         forwardBtn.addEventListener('click', () => {
             video.currentTime = Math.min(video.duration, video.currentTime + 10);
         });
+
         volumeBar.addEventListener('input', (e) => {
             video.volume = e.target.value / 100;
             updateVolumeIcon();
@@ -516,9 +631,6 @@
                 const bufferedEnd = video.buffered.end(video.buffered.length - 1);
                 const bufferPercent = (bufferedEnd / video.duration) * 100;
                 progressBuffer.style.width = bufferPercent + '%';
-                
-                const bufferSeconds = bufferedEnd - video.currentTime;
-                document.getElementById('infoBuffer').textContent = formatTime(bufferSeconds);
             }
         });
 
@@ -550,7 +662,7 @@
         });
 
         infoBtn.addEventListener('click', () => {
-            infoOverlayEl.classList.toggle('active');
+            statsOverlay.classList.toggle('active');
         });
 
         fullscreenBtn.addEventListener('click', () => {
@@ -606,6 +718,12 @@
                 controlsTimeout = setTimeout(() => {
                     customControls.style.opacity = '0';
                 }, 3000);
+            }
+        });
+
+        urlInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loadStream();
             }
         });
 
