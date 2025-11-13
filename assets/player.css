@@ -211,7 +211,7 @@ input[type="text"]:focus {
 	word-break: break-word;
 }
 
-.info-card div {
+.info-card div, .info-card p {
     color: rgb(139, 152, 171);
     font-size: 0.9rem;
     line-height: 1.6;
