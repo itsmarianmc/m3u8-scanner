@@ -7,6 +7,7 @@
     <title>M3U8 Player</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v7.1.0/css/all.css" />
     <link rel="stylesheet" href="/assets/player.css">
 </head>
 <body>
@@ -22,13 +23,12 @@
             </a>
         </nav>
     </header>
-    
     <div class="main-content">
         <div class="player-container">
             <div class="player-section">
                 <div class="error-message" id="error"></div>
                 <div class="video-wrapper">
-                    <video id="video" preload="metadata"></video>
+                    <video id="video" preload="metadata" playsinline webkit-playsinline></video>
                     <div class="loading-overlay" id="loadingOverlay">
                         <div class="video_sspinner" data-layer="4">
                             <div>
@@ -126,16 +126,20 @@
                         <div class="controls-row">
                             <button class="control-btn play-pause-btn" id="playPauseBtn">
                                 <i class="fas fa-play"></i>
+                                <span class="tooltip">Play/Pause (space)</span>
                             </button>
                             <button class="control-btn" id="backwardBtn" title="10s zurück">
                                 <i class="fas fa-backward"></i>
+                                <span class="tooltip">Back 10s (←)</span>
                             </button>
                             <button class="control-btn" id="forwardBtn" title="10s vor">
                                 <i class="fas fa-forward"></i>
+                                <span class="tooltip">Forward 10s (→)</span>
                             </button>
                             <div class="volume-control">
                                 <button class="control-btn" id="volumeBtn">
                                     <i class="fas fa-volume-up"></i>
+                                    <span class="tooltip">Volume (m)</span>
                                 </button>
                                 <div class="volume-slider-wrapper">
                                     <input type="range" id="volumeBar" value="25" min="0" max="100">
@@ -147,10 +151,12 @@
                             <div class="controls-spacer"></div>
                             <button class="control-btn" id="infoBtn" title="Stream Info">
                                 <i class="fas fa-info-circle"></i>
+                                <span class="tooltip">Stream Info (i)</span>
                             </button>
                             <div class="settings-wrapper">
                                 <button class="control-btn" id="settingsBtn" title="Geschwindigkeit">
                                     <i class="fas fa-cog"></i>
+                                    <span class="tooltip">Playback Speed</span>
                                 </button>
                                 <div class="settings-menu" id="settingsMenu">
                                     <div class="settings-menu-title">Playback Speed</div>
@@ -180,8 +186,13 @@
                                     </div>
                                 </div>
                             </div>
+                            <button class="control-btn" id="pipBtn" title="Picture-in-Picture">
+                                <i class="fas fa-picture-in-picture"></i>
+                                <span class="tooltip">Picture-in-Picture (Ctrl+P)</span>
+                            </button>
                             <button class="control-btn" id="fullscreenBtn" title="Vollbild">
                                 <i class="fas fa-expand"></i>
+                                <span class="tooltip">Fullscreen (f)</span>
                             </button>
                         </div>
                     </div>
@@ -191,22 +202,35 @@
                     <button class="btn-load" id="streamStarter">
                         <i class="fas fa-play"></i>
                         Play
+                        <span class="tooltip">Load and play stream</span>
                     </button>
                 </div>
-                
                 <div class="info-box">
-                    <div class="status">
-                        <div class="status-dot" id="statusDot"></div>
-                        <span id="statusText">Ready</span>
+                    <div class="info-left">
+                        <div class="status">
+                            <div class="status-dot" id="statusDot"></div>
+                            <span id="statusText">Ready</span>
+                        </div>
+                        <span id="quality"></span>
                     </div>
-                    <span id="quality"></span>
+                    <div class="info-right">
+                        <div class="toggle-container">
+                            <label class="toggle-label">Standard Controls</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="defaultControlsToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                
                 <div class="info-card" style="margin-top: auto;">
                     <h3><i class="fas fa-plug"></i> Use API</h3>
                     <p style="margin-bottom: 1rem;">The base url for the API endpoint is <code>https://m3u8scanner.itsmarian.is-a.dev/api-player/</code> after this you can use these custom parameters to change the design the way you like it.</p>
                     <div>
                         <a><code>?video_m3u8_src=URL</code>: Plays the video from URL (required)</a>
+                    </div>
+                    <div>
+                        <a><code>?volume=NMBR</code>: Sets the volume of the video to NMBR (default: 0, range: 0 - 1, does not work with autoplay on default!)</a>
                     </div>
                     <div>
                         <a><code>?autoplay=true</code>: Starts the video automatically (default: false)</a>
@@ -224,38 +248,6 @@
                             To autoplay audio automatically, you need to set "Sound" in <code>chrome://settings/content/siteDetails?site=https%3A%2F%2Fm3u8scanner.itsmarian.is-a.dev</code> to "Allow".
                         </a>
                     </div>
-                    </p>
-                </div>
-            </div>
-            <div class="sidebar">
-                <div class="info-card">
-                    <h3><i class="fas fa-info-circle"></i> Stream Info</h3>
-                    <div class="info-item">
-                        <span class="info-label">Resolution</span>
-                        <span class="info-value" id="resolution">-</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Bitrate</span>
-                        <span class="info-value" id="bitrate">-</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Quality Levels</span>
-                        <span class="info-value" id="levels">-</span>
-                    </div>
-                </div>
-                <div class="info-card">
-                    <h3><i class="fas fa-link"></i> Quick Links</h3>
-                    <ul class="quick-links">
-                        <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
-                        <li><a href="/#features"><i class="fas fa-star"></i> Features</a></li>
-                        <li><a href="/#how-it-works"><i class="fas fa-info-circle"></i> How It Works</a></li>
-                        <li><a href="/#download"><i class="fas fa-info-download"></i> Download Extension</a></li>
-                    </ul>
-                </div>
-                <div class="info-card">
-                    <h3><i class="fas fa-question-circle"></i> How to Use</h3>
-                    <p style="color: #8b98ab; font-size: 0.9rem; line-height: 1.6;">
-                        Use the "M3U8 extension" to scan your favorite pages for m3u8 files, copy the links and enter the link here. Alternatively, you can open the player directly via the extension
                     </p>
                 </div>
             </div>

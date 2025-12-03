@@ -69,7 +69,7 @@
     </style>
 </head>
 <body>
-    <video id="video" preload="metadata" muted></video>
+    <video id="video" preload="metadata" muted playsinline webkit-playsinline></video>
     <div class="error-message" id="error"></div>
     <div class="loading-overlay" id="loadingOverlay"></div>
 
@@ -123,6 +123,9 @@
             const autoskipToLatest = getUrlParameter('autoskip_to_latest') === 'true';
             const autoskipInterval = parseInt(getUrlParameter('autoskip_interval')) || 0;
             const mutedParam = getUrlParameter('muted');
+            const volumeParam = getUrlParameter('volume');
+            const controlsParam = getUrlParameter('controls');
+            const volume = volumeParam;
             const muted = mutedParam === null || mutedParam === 'true';
             
             if (!videoSource) {
@@ -150,7 +153,16 @@
                     showLoading(false);
                     
                     video.muted = muted;
-                    
+                    video.volume = volume;
+
+                    if (controlsParam) {
+                        if (controlsParam == 'true') {
+                            video.controls = true;
+                        } else if (controlsParam == 'false') {
+                            video.controls = false;
+                        }
+                    }
+
                     if (autoskipToLatest && autoskipInterval > 0) {
                         setupAutoSkip(autoskipInterval);
                     }
