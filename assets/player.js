@@ -604,8 +604,11 @@ function initializePlayer() {
     
     if (volumeBar) {
         volumeBar.addEventListener('input', (e) => {
-            video.volume = e.target.value / 100;
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            video.volume = isMobile ? 1 : e.target.value / 100;
+            if (volumeBar) volumeBar.value = video.volume * 100;
             updateVolumeIcon();
+            showVolumeFeedback(video.volume - (video.volume === 1 ? 0 : e.target.value / 100));
         });
     }
     

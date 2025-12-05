@@ -62,6 +62,7 @@ header {
 	padding: 2rem;
 	max-width: 1400px;
 	width: 100%;
+	transition: all 0.3s ease;
 	margin: 0 auto;
 }
 
@@ -1105,6 +1106,43 @@ input[type="text"]:focus {
 	opacity: 1;
 }
 
+.stats-panel::-webkit-scrollbar {
+    width: 5px;
+    -webkit-appearance: none;
+    z-index: 1000000;
+}
+
+::-webkit-scrollbar {
+    width: 7.5px;
+    -webkit-appearance: none;
+    z-index: 1000000;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+::-webkit-scrollbar-track {
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #707070;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a0;
+}
+
+::-webkit-overflow-scrolling:touch {
+    background: #707070;
+    width: 5px;
+}
+
 @media (max-width: 1024px) {
 	.stats-overlay {
 		flex-direction: column;
@@ -1137,6 +1175,51 @@ input[type="text"]:focus {
 	}
 	
 	.tooltip {
+		display: none;
+	}
+
+	.main-content {
+		padding: 0px;
+	}
+
+	.player-section {
+		border: none;
+		border-radius: 0px;
+	}
+
+	.player-container {
+		margin-bottom: 0px;
+	}
+}
+
+@media (max-width: 405px) {
+	#backwardBtn, #forwardBtn, .volume-control, .settings-wrapper {
+		display: none;
+	}
+
+	.stats-overlay {
+		font-size: 10px !important;
+	}
+
+	.stats-overlay {
+        flex-direction: row;
+    }
+
+	.stats-panel {
+        max-width: 48%;
+		max-height: 130px;
+		overflow-y: scroll;
+    }
+
+	.stats-item {
+		max-width: 100%;
+		min-width: 100%;
+	}
+}
+
+
+@media (max-width: 355px) {
+	.main-content {
 		display: none;
 	}
 }
