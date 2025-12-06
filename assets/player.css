@@ -233,6 +233,68 @@ header {
 	transform: translateY(-2px);
 }
 
+/* Context Menu Styles */
+.context-menu {
+    position: absolute;
+    background: rgba(15, 20, 30, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 8px;
+    min-width: 220px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+    transition: all 0.2s ease;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.context-menu.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: scale(1);
+}
+
+.context-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.9);
+    position: relative;
+}
+
+.context-item:hover {
+    background: rgba(102, 126, 234, 0.2);
+}
+
+.context-item i:first-child {
+    width: 16px;
+    text-align: center;
+}
+
+.context-check {
+    margin-left: auto;
+}
+
+.context-check i {
+    color: #42a5f5;
+    font-size: 12px;
+}
+
+.context-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 6px 0;
+}
+
 .controls-section {
 	display: flex;
 	gap: 1rem;
