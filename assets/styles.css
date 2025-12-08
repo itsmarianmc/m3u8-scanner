@@ -444,6 +444,37 @@ header {
     transform: translateY(50%) rotate(-45deg);
 }
 
+::-webkit-scrollbar {
+    width: 7.5px;
+    -webkit-appearance: none;
+    z-index: 1000000;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+::-webkit-scrollbar-track {
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #707070;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a0;
+}
+
+::-webkit-overflow-scrolling:touch {
+    background: #707070;
+    width: 5px;
+}
+
 @media (max-width: 768px) {
 	.hero-content {
 		grid-template-columns: 1fr;
@@ -490,7 +521,7 @@ header {
         top: 70px;
         right: -100%;
         flex-direction: column;
-        background: var(--primary);
+        background: #16181d;
         width: 80%;
         height: calc(100vh - 80px);
         padding: 40px 20px;

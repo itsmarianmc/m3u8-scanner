@@ -38,6 +38,46 @@ let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 let mouseX = 0;
 let mouseY = 0;
 
+const menu = document.getElementById('mobile-menu');
+const navLinks = document.querySelector('.nav-links');
+
+menu.addEventListener('click', () => {
+	const isActive = menu.classList.contains('active');
+
+	if (isActive) {
+		menu.classList.remove('active');
+		navLinks.classList.remove('active');
+	} else {
+		menu.classList.add('active');
+		navLinks.classList.add('active');
+	}
+});
+
+function updatePageTitleForStream(url) {
+    if (!url) return;
+    
+    const urlObj = new URL(url);
+    const fileName = urlObj.pathname.split('/').pop() || 'Stream';
+    const cleanFileName = fileName.replace('.m3u8', '').replace(/_/g, ' ').replace(/-/g, ' ');
+    
+    document.title = `${cleanFileName} - M3U8 PLAYER`;
+    
+    const appleTitleMeta = document.querySelector('meta[name="apple-mobile-web-app-title"]');
+    if (appleTitleMeta) {
+        appleTitleMeta.content = cleanFileName;
+    }
+    
+    const ogTitleMeta = document.querySelector('meta[property="og:title"]');
+    if (ogTitleMeta) {
+        ogTitleMeta.content = cleanFileName;
+    }
+    
+    const descriptionMeta = document.querySelector('meta[name="description"]');
+    if (descriptionMeta) {
+        descriptionMeta.content = `Playing: ${fileName} | M3U8 PLAYER`;
+    }
+}
+
 function getFrameStats() {
     try {
         if (video && video.getVideoPlaybackQuality) {
@@ -316,6 +356,62 @@ function showLoading(show) {
     }
 }
 
+function updateButtonsState(hasUrl) {
+    const buttons = [
+        playPauseBtn,
+        backwardBtn,
+        forwardBtn,
+        volumeBtn,
+        volumeBar,
+        progressContainer,
+        infoBtn,
+        settingsBtn,
+        fullscreenBtn,
+        pipBtn
+    ];
+    
+    buttons.forEach(btn => {
+        if (btn) {
+            btn.disabled = !hasUrl;
+            if (btn.classList) {
+                if (!hasUrl) {
+                    btn.classList.add('disabled');
+                } else {
+                    btn.classList.remove('disabled');
+                }
+            }
+        }
+    });
+    
+    if (playPauseBtn) {
+        if (!hasUrl) {
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            playPauseBtn.style.opacity = '0.5';
+            playPauseBtn.style.cursor = 'not-allowed';
+            if (playPauseBtn.querySelector('.tooltip')) {
+                playPauseBtn.querySelector('.tooltip').textContent = 'Load a stream first';
+            }
+        } else {
+            playPauseBtn.style.opacity = '1';
+            playPauseBtn.style.cursor = 'pointer';
+        }
+    }
+    
+    if (progressContainer) {
+        if (!hasUrl) {
+            progressContainer.style.opacity = '0.5';
+            progressContainer.style.pointerEvents = 'none';
+        } else {
+            progressContainer.style.opacity = '1';
+            progressContainer.style.pointerEvents = 'auto';
+        }
+    }
+    
+    if (volumeBar) {
+        volumeBar.disabled = !hasUrl;
+    }
+}
+
 function loadStream() {
     if (!urlInput || !video) return;
     
@@ -323,9 +419,12 @@ function loadStream() {
     
     if (!url) {
         showError('Please enter a valid M3U8 URL');
+        updateButtonsState(false);
         return;
     }
 
+    updatePageTitleForStream(url);
+    
     if (errorEl) errorEl.classList.remove('show');
     updateStatus('Loading...', false);
     showLoading(true);
@@ -396,6 +495,7 @@ function loadStream() {
     
     video.volume = 0.25;
     updateVolumeIcon();
+    updateButtonsState(true);
 }
 
 function isPiPSupported() {
@@ -546,16 +646,34 @@ function showContextMenu(x, y) {
     let posX = x;
     let posY = y;
     
-    if (x + menuWidth > windowWidth) {
-        posX = windowWidth - menuWidth - 10;
+    if (videoWrapper.classList.contains('fs') || 
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement) {
+        if (x + menuWidth > windowWidth) {
+            posX = windowWidth - menuWidth - 10;
+        }
+        
+        if (y + menuHeight > windowHeight) {
+            posY = windowHeight - menuHeight - 10;
+        }
+    } else {
+        const wrapperRect = videoWrapper.getBoundingClientRect();
+        posX = x - wrapperRect.left;
+        posY = y - wrapperRect.top;
+        
+        if (posX + menuWidth > wrapperRect.width) {
+            posX = wrapperRect.width - menuWidth - 10;
+        }
+        
+        if (posY + menuHeight > wrapperRect.height) {
+            posY = wrapperRect.height - menuHeight - 10;
+        }
+        
+        posX = Math.max(10, posX);
+        posY = Math.max(10, posY);
     }
-    
-    if (y + menuHeight > windowHeight) {
-        posY = windowHeight - menuHeight - 10;
-    }
-    
-    posX = Math.max(10, Math.min(posX, windowWidth - menuWidth - 10));
-    posY = Math.max(10, Math.min(posY, windowHeight - menuHeight - 10));
     
     contextMenu.style.left = posX + 'px';
     contextMenu.style.top = posY + 'px';
@@ -664,13 +782,11 @@ function setupIOSFullscreenDetection() {
     video.addEventListener('webkitbeginfullscreen', function() {
         videoWrapper.classList.add("fs");
         updateFullscreenIcon();
-        console.log('iOS: Entered fullscreen');
     });
     
     video.addEventListener('webkitendfullscreen', function() {
         videoWrapper.classList.remove("fs");
         updateFullscreenIcon();
-        console.log('iOS: Exited fullscreen');
     });
 }
 
@@ -722,6 +838,11 @@ function initializePlayer() {
     defaultControlsToggle = document.getElementById('defaultControlsToggle');
     
     urlInput.value = videoSource;
+    updateButtonsState(!!videoSource);
+    
+    if (videoSource) {
+        updatePageTitleForStream(videoSource);
+    }
     
     if (video) {
         video.addEventListener('playing', () => {
@@ -948,6 +1069,10 @@ function initializePlayer() {
                 loadStream();
             }
         });
+        
+        urlInput.addEventListener('input', function() {
+            updateButtonsState(this.value.trim() !== '');
+        });
     }
     
     if (videoWrapper) {
@@ -986,6 +1111,15 @@ function initializePlayer() {
     
     document.addEventListener('keydown', (e) => {
         if (!video || e.target.tagName === 'INPUT') return;
+        
+        if (!urlInput.value.trim()) {
+            if (['Space', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 
+                 'KeyF', 'KeyM', 'KeyI', 'KeyP'].includes(e.code)) {
+                e.preventDefault();
+                showError('Please load a stream first');
+            }
+            return;
+        }
         
         switch(e.code) {
             case 'Space':
