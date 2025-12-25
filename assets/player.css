@@ -694,7 +694,7 @@ input[type="text"]:-internal-autofill-selected {
 	opacity: 1;
 }
 
-.video-wrapper.default-controls .custom-controls {
+.video-wrapper.default-controls .custom-controls, .video-wrapper.default-controls .context-menu.active, .video-wrapper.default-controls .context-menu {
 	display: none !important;
 }
 

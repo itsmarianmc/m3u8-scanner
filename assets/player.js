@@ -168,7 +168,7 @@ function showSeekFeedback(seconds) {
             <path class="skparr2" d="M 40 4 L 28 16 L 40 28" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"></path>
             <path class="skparr3" d="M 62 4 L 50 16 L 62 28" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"></path>
         </svg>
-        <div class="seek-text" style=""><span>${isForward ? '+10' : '-10'}</span></div>
+        <div class="seek-text" style=""><span>${isForward ? '+5' : '-5'}</span></div>
     `;
     
     seekFeedback.innerHTML = iconSvg;
@@ -915,14 +915,14 @@ function initializePlayer() {
     
     if (backwardBtn) {
         backwardBtn.addEventListener('click', () => {
-            video.currentTime = Math.max(0, video.currentTime - 10);
+            video.currentTime = Math.max(0, video.currentTime - 5);
             showSeekFeedback(-15);
         });
     }
     
     if (forwardBtn) {
         forwardBtn.addEventListener('click', () => {
-            video.currentTime = Math.min(video.duration, video.currentTime + 10);
+            video.currentTime = Math.min(video.duration, video.currentTime + 5);
             showSeekFeedback(+15);
         });
     }
@@ -1128,28 +1128,28 @@ function initializePlayer() {
                 break;
             case 'ArrowLeft':
                 e.preventDefault();
-                video.currentTime = Math.max(0, video.currentTime - 10);
+                video.currentTime = Math.max(0, video.currentTime - 5);
                 showSeekFeedback(-15);
                 break;
             case 'ArrowRight':
                 e.preventDefault();
-                video.currentTime = Math.min(video.duration, video.currentTime + 10);
+                video.currentTime = Math.min(video.duration, video.currentTime + 5);
                 showSeekFeedback(+15);
                 break;
             case 'ArrowUp':
                 e.preventDefault();
-                const volUp = Math.min(1, video.volume + 0.1);
+                const volUp = Math.min(1, video.volume + 0.05);
                 video.volume = volUp;
                 if (volumeBar) volumeBar.value = volUp * 100;
-                showVolumeFeedback(0.1);
+                showVolumeFeedback(0.05);
                 updateVolumeIcon();
                 break;
             case 'ArrowDown':
                 e.preventDefault();
-                const volDown = Math.max(0, video.volume - 0.1);
+                const volDown = Math.max(0, video.volume - 0.05);
                 video.volume = volDown;
                 if (volumeBar) volumeBar.value = volDown * 100;
-                showVolumeFeedback(-0.1);
+                showVolumeFeedback(-0.05);
                 updateVolumeIcon();
                 break;
             case 'KeyF':
