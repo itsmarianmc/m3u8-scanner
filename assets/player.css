@@ -209,6 +209,10 @@ header {
 	cursor: none;
 }
 
+.video-wrapper.fs {
+	border-radius: 0px !important;
+}
+
 .video-wrapper:focus, .video-wrapper:active {
 	outline: none !important;
 }
