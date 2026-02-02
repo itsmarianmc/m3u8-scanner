@@ -790,6 +790,52 @@ function setupIOSFullscreenDetection() {
     });
 }
 
+function updateProgressIndicators() {
+    if (!video) return;
+
+    if (currentTimeEl) currentTimeEl.textContent = isFinite(video.currentTime) ? formatTime(video.currentTime) : '00:00';
+    if (durationEl) {
+        if (isFinite(video.duration)) {
+            durationEl.textContent = formatTime(video.duration);
+        } else if (video.seekable && video.seekable.length > 0) {
+            durationEl.textContent = 'Live';
+        } else {
+            durationEl.textContent = '—';
+        }
+    }
+
+    if (isFinite(video.duration) && video.duration > 0) {
+        const filledPercent = (video.currentTime / video.duration) * 100;
+        if (progressFilled) progressFilled.style.width = Math.max(0, Math.min(100, filledPercent)) + '%';
+
+        let bufferPercent = 0;
+        if (video.buffered && video.buffered.length > 0) {
+            let bufferedEnd = video.buffered.end(video.buffered.length - 1);
+            if (bufferedEnd < video.currentTime) bufferedEnd = video.currentTime;
+            bufferPercent = (bufferedEnd / video.duration) * 100;
+
+            if (video.duration - bufferedEnd <= 0.5) bufferPercent = 100;
+        } else {
+            bufferPercent = filledPercent;
+        }
+
+        bufferPercent = Math.max(bufferPercent, filledPercent);
+        if (progressBuffer) progressBuffer.style.width = Math.max(0, Math.min(100, bufferPercent)) + '%';
+    } else {
+        if (video.seekable && video.seekable.length > 0) {
+            const start = video.seekable.start(0);
+            const end = video.seekable.end(0);
+            const windowLen = (end - start) || 1;
+            const filledPercent = ((video.currentTime - start) / windowLen) * 100;
+            if (progressFilled) progressFilled.style.width = Math.max(0, Math.min(100, filledPercent)) + '%';
+            if (progressBuffer) progressBuffer.style.width = '100%';
+        } else {
+            if (progressFilled) progressFilled.style.width = '0%';
+            if (progressBuffer) progressBuffer.style.width = '0%';
+        }
+    }
+}
+
 function initializePlayer() {
     video = document.getElementById('video');
     statusDot = document.getElementById('statusDot');
@@ -883,18 +929,9 @@ function initializePlayer() {
         });
         
         video.addEventListener('timeupdate', () => {
-            if (!video.duration) return;
-            
-            const percent = (video.currentTime / video.duration) * 100;
-            if (progressFilled) progressFilled.style.width = percent + '%';
-            
-            if (currentTimeEl) currentTimeEl.textContent = formatTime(video.currentTime);
-            if (durationEl) durationEl.textContent = formatTime(video.duration);
-            
-            if (video.buffered.length > 0 && progressBuffer) {
-                const bufferedEnd = video.buffered.end(video.buffered.length - 1);
-                const bufferPercent = (bufferedEnd / video.duration) * 100;
-                progressBuffer.style.width = bufferPercent + '%';
+            if (video) {
+                video.addEventListener('timeupdate', updateProgressIndicators);
+                updateProgressIndicators();
             }
         });
         
@@ -947,8 +984,16 @@ function initializePlayer() {
     if (progressContainer) {
         progressContainer.addEventListener('click', (e) => {
             const rect = progressContainer.getBoundingClientRect();
-            const percent = (e.clientX - rect.left) / rect.width;
-            video.currentTime = percent * video.duration;
+            const pct = (e.clientX - rect.left) / rect.width;
+            if (isFinite(video.duration) && video.duration > 0) {
+                video.currentTime = Math.max(0, Math.min(video.duration, pct * video.duration));
+            }
+            else if (video.seekable && video.seekable.length > 0) {
+                const start = video.seekable.start(0);
+                const end = video.seekable.end(0);
+                const target = start + Math.max(0, Math.min(1, pct)) * (end - start);
+                video.currentTime = target;
+            }
         });
     }
     
