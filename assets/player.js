@@ -316,7 +316,15 @@ function startStatsUpdate() {
 
 function getUrlParameter(name) {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
+    const val = urlParams.get(name);
+    if (val !== null) return val;
+
+    const search = window.location.search;
+    const prefix = (search.indexOf('?') === 0 ? search.slice(1) : search);
+    const marker = name + '=';
+    const start = prefix.indexOf(marker);
+    if (start === -1) return null;
+    return decodeURIComponent(prefix.slice(start + marker.length));
 }
 
 const videoSource = getUrlParameter('video_m3u8_src') || '';
@@ -333,11 +341,9 @@ function updateStatus(text, active = false) {
     statusText.textContent = text;
     if (active) {
         statusDot.classList.add('active');
-        document.getElementById('video').classList.add('unset-ratio');
         document.getElementById('loadingOverlay').classList.remove('active');
     } else {
         statusDot.classList.remove('active');
-        document.getElementById('video').classList.remove('unset-ratio');
         if (text === 'Buffering...') {
             document.getElementById('loadingOverlay').classList.add('active');
         } else {
@@ -433,7 +439,8 @@ function loadStream() {
     isLiveStream = false;
     if (liveBtn) liveBtn.style.display = 'none';
     const timeDisplay = document.getElementById('timeDisplay');
-    if (timeDisplay) timeDisplay.style.visibility = '';
+    if (timeDisplay) timeDisplay.style.display = '';
+    document.getElementById('video').classList.remove('unset-ratio');
 
     if (hls) {
         hls.destroy();
@@ -454,6 +461,7 @@ function loadStream() {
 
         hls.on(Hls.Events.MANIFEST_PARSED, function(event, data) {
             showLoading(false);
+            document.getElementById('video').classList.add('unset-ratio');
             if (qualityEl) qualityEl.textContent = `${data.levels.length} quality levels`;
             if (statsIds.videoId) statsIds.videoId.textContent = url.split('/').pop().split('?')[0] || 'Stream';
             video.play().catch(e => {
@@ -498,6 +506,7 @@ function loadStream() {
         video.src = url;
         video.addEventListener('loadedmetadata', function() {
             showLoading(false);
+            document.getElementById('video').classList.add('unset-ratio');
             video.play().catch(e => console.log('Autoplay prevented:', e));
         });
         video.addEventListener('error', function() {
@@ -776,15 +785,18 @@ function updateLiveUI() {
     if (!liveBtn) return;
 
     const timeDisplay = document.getElementById('timeDisplay');
+    const liveModeToggleContainer = document.getElementById('liveModeToggleContainer');
 
     if (!isLiveStream) {
         liveBtn.style.display = 'none';
+        if (liveModeToggleContainer) liveModeToggleContainer.style.display = 'none';
         if (timeDisplay) timeDisplay.style.display = '';
         if (currentTimeEl) currentTimeEl.textContent = isFinite(video.currentTime) ? formatTime(video.currentTime) : '00:00';
         if (durationEl) durationEl.textContent = isFinite(video.duration) ? formatTime(video.duration) : '—';
         return;
     }
 
+    if (liveModeToggleContainer) liveModeToggleContainer.style.display = '';
     liveBtn.style.display = 'flex';
     const atEdge = isAtLiveEdge();
     const paused = video.paused;
