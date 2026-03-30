@@ -164,40 +164,6 @@
                         </div>
                     </div>
                     <div class="seek-feedback" id="seekFeedback"></div>
-                    <div class="context-menu" id="contextMenu">
-                        <div class="context-item" data-action="loop">
-                            <i class="fas fa-redo"></i>
-                            <span>Loop</span>
-                            <div class="context-check">
-                                <i class="fas fa-check" style="display: none;"></i>
-                            </div>
-                        </div>
-                        <div class="context-item" data-action="snapshot">
-                            <i class="fas fa-camera"></i>
-                            <span>Save video frame as</span>
-                        </div>
-                        <div class="context-divider"></div>
-                        <div class="context-item" data-action="pip">
-                            <i class="fas fa-picture-in-picture"></i>
-                            <span>Picture-in-Picture</span>
-                        </div>
-                        <div class="context-item" data-action="stats">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>Stats overlay</span>
-                            <div class="context-check">
-                                <i class="fas fa-check" style="display: none;"></i>
-                            </div>
-                        </div>
-                        <div class="context-item" data-action="fullscreen">
-                            <i class="fas fa-expand"></i>
-                            <span>Fullscreen</span>
-                        </div>
-                        <div class="context-divider"></div>
-                        <div class="context-item" data-action="reset">
-                            <i class="fas fa-undo"></i>
-                            <span>Reset player</span>
-                        </div>
-                    </div>
                     <div class="custom-controls">
                         <div class="progress-container" id="progressContainer">
                             <div class="progress-bar-wrapper">
@@ -229,9 +195,13 @@
                                     <input type="range" id="volumeBar" value="25" min="0" max="100">
                                 </div>
                             </div>
-                            <div class="time-display">
+                            <div class="time-display" id="timeDisplay">
                                 <span id="currentTime">00:00</span> / <span id="duration">00:00</span>
                             </div>
+                            <button class="control-btn live-btn" id="liveBtn" style="display:none" title="Go to live edge">
+                                <span class="live-dot"></span>
+                                <span id="liveBtnText">LIVE</span>
+                            </button>
                             <div class="controls-spacer"></div>
                             <button class="control-btn" id="infoBtn" title="Stream Info">
                                 <i class="fas fa-info-circle"></i>
@@ -298,6 +268,13 @@
                         <span id="quality"></span>
                     </div>
                     <div class="info-right">
+                        <div class="toggle-container">
+                            <label class="toggle-label">Live Mode</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="liveModeToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
                         <div class="toggle-container">
                             <label class="toggle-label">Standard Controls</label>
                             <label class="toggle-switch">

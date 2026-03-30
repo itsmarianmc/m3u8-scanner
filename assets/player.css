@@ -360,66 +360,60 @@ header {
 	transform: translateY(-2px);
 }
 
-/* Context Menu Styles */
-.context-menu {
-    position: absolute;
-    background: rgba(15, 20, 30, 0.98);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 10px;
-    padding: 8px;
-    min-width: 220px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    opacity: 0;
-    pointer-events: none;
-    transform: scale(0.95);
-    transition: all 0.2s ease;
-    max-height: 70vh;
-    overflow-y: auto;
-}
-
-.context-menu.active {
-    opacity: 1;
-    pointer-events: all;
-    transform: scale(1);
-}
-
-.context-item {
-    padding: 10px 12px;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.2s;
-    font-size: 14px;
+/* Live button */
+.live-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: rgba(255, 255, 255, 0.9);
-    position: relative;
+    gap: 6px;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em;
+    background: rgba(239, 83, 80, 0.2) !important;
+    border: 1px solid rgba(239, 83, 80, 0.5) !important;
+    color: #ff6b6b !important;
+    transition: all 0.2s;
+    min-width: unset !important;
+    height: auto !important;
+    cursor: pointer;
 }
 
-.context-item:hover {
-    background: rgba(102, 126, 234, 0.2);
+.live-btn.at-edge {
+    background: rgba(239, 83, 80, 0.25) !important;
+    border-color: #ef5350 !important;
+    color: #ff5252 !important;
+    cursor: default;
 }
 
-.context-item i:first-child {
-    width: 16px;
-    text-align: center;
+.live-btn.behind-live {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    cursor: pointer;
 }
 
-.context-check {
-    margin-left: auto;
+.live-btn.behind-live:hover {
+    background: rgba(239, 83, 80, 0.15) !important;
+    border-color: rgba(239, 83, 80, 0.4) !important;
+    color: #ff6b6b !important;
 }
 
-.context-check i {
-    color: #42a5f5;
-    font-size: 12px;
+.live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
 }
 
-.context-divider {
-    height: 1px;
-    background: rgba(255, 255, 255, 0.1);
-    margin: 6px 0;
+.live-btn.at-edge .live-dot {
+    animation: livePulse 1.4s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
 }
 
 .controls-section {
@@ -698,7 +692,7 @@ input[type="text"]:-internal-autofill-selected {
 	opacity: 1;
 }
 
-.video-wrapper.default-controls .custom-controls, .video-wrapper.default-controls .context-menu.active, .video-wrapper.default-controls .context-menu {
+.video-wrapper.default-controls .custom-controls {
 	display: none !important;
 }
 
