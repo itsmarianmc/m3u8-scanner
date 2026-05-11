@@ -327,7 +327,15 @@ function getUrlParameter(name) {
     return decodeURIComponent(prefix.slice(start + marker.length));
 }
 
-const videoSource = getUrlParameter('video_m3u8_src') || '';
+const videoSource          = getUrlParameter('video_m3u8_src') || '';
+const paramStartSkipToCurrent = getUrlParameter('startSkipToCurrent') === 'true';
+const paramAutoplay           = getUrlParameter('autoplay') === 'true';
+const paramMuted              = getUrlParameter('muted') !== null ? getUrlParameter('muted') === 'true' : null;
+const paramVolume             = getUrlParameter('volume') !== null ? parseFloat(getUrlParameter('volume')) : null;
+const paramControls           = getUrlParameter('controls');
+const paramAutoskip           = getUrlParameter('autoskip_to_latest') === 'true';
+const paramAutoskipInt        = parseInt(getUrlParameter('autoskip_interval')) || 0;
+const paramEnableNative       = getUrlParameter('enableNative') === 'true';
 
 function showError(message) {
     if (!errorEl) return;
@@ -419,6 +427,34 @@ function updateButtonsState(hasUrl) {
     }
 }
 
+function applyUrlParamSettings() {
+    if (paramMuted !== null) {
+        video.muted = paramMuted;
+    }
+    if (paramVolume !== null && !isNaN(paramVolume)) {
+        video.volume = Math.max(0, Math.min(1, paramVolume));
+        if (volumeBar) volumeBar.value = video.volume * 100;
+    }
+    if (paramControls === 'true') {
+        videoWrapper.classList.add('default-controls');
+        video.setAttribute('controls', 'true');
+        const toggle = document.getElementById('defaultControlsToggle');
+        if (toggle) toggle.checked = true;
+    } else if (paramControls === 'false') {
+        videoWrapper.classList.remove('default-controls');
+        video.removeAttribute('controls');
+    }
+    updateVolumeIcon();
+}
+
+function fixAvSync() {
+    if (!video || !hls) return;
+    const drift = video.currentTime;
+    if (!isFinite(drift) || drift <= 0) return;
+    const target = video.currentTime;
+    video.currentTime = Math.max(0, target - 0.001);
+}
+
 function loadStream() {
     if (!urlInput || !video) return;
     
@@ -464,9 +500,38 @@ function loadStream() {
             document.getElementById('video').classList.add('unset-ratio');
             if (qualityEl) qualityEl.textContent = `${data.levels.length} quality levels`;
             if (statsIds.videoId) statsIds.videoId.textContent = url.split('/').pop().split('?')[0] || 'Stream';
-            video.play().catch(e => {
-                console.log('Autoplay prevented:', e);
-            });
+            applyUrlParamSettings();
+            if (paramAutoskip && paramAutoskipInt > 0) {
+                setInterval(() => {
+                    if (video.duration && isFinite(video.duration)) {
+                        video.currentTime = Math.max(0, video.duration - 5);
+                    }
+                }, paramAutoskipInt * 1000);
+            }
+            if (paramStartSkipToCurrent) {
+                setTimeout(() => goToLiveEdge(), 500);
+            }
+            if (paramAutoplay) {
+                video.play().catch(e => console.log('Autoplay prevented:', e));
+            } else {
+                video.play().catch(e => console.log('Autoplay prevented:', e));
+            }
+        });
+
+        let avSyncChecked = false;
+        hls.on(Hls.Events.FRAG_CHANGED, function(event, data) {
+            if (avSyncChecked || !video || video.paused) return;
+            if (data.frag.type !== 'main') return;
+            avSyncChecked = true;
+            setTimeout(() => {
+                if (!video || video.paused) return;
+                const audioTracks = video.audioTracks || (hls.audioTrack !== undefined ? [hls.audioTrack] : []);
+                const bufLen = getBufferHealth();
+                if (bufLen > 0.5) {
+                    const savedTime = video.currentTime;
+                    video.currentTime = Math.max(0, savedTime - 0.001);
+                }
+            }, 1500);
         });
 
         hls.on(Hls.Events.LEVEL_LOADED, function(event, data) {
@@ -507,6 +572,15 @@ function loadStream() {
         video.addEventListener('loadedmetadata', function() {
             showLoading(false);
             document.getElementById('video').classList.add('unset-ratio');
+            applyUrlParamSettings();
+            if (paramAutoskip && paramAutoskipInt > 0) {
+                setInterval(() => {
+                    if (video.duration && isFinite(video.duration)) {
+                        video.currentTime = Math.max(0, video.duration - 5);
+                    }
+                }, paramAutoskipInt * 1000);
+            }
+            if (paramStartSkipToCurrent) setTimeout(() => goToLiveEdge(), 500);
             video.play().catch(e => console.log('Autoplay prevented:', e));
         });
         video.addEventListener('error', function() {
@@ -878,11 +952,36 @@ function initializePlayer() {
     if (videoSource) {
         updatePageTitleForStream(videoSource);
     }
+
+    if (paramEnableNative) {
+        const toggle = document.getElementById('defaultControlsToggle');
+        if (toggle) {
+            toggle.checked = true;
+            toggleDefaultControls();
+        }
+    }
+
+    let avSyncMonitorActive = false;
+    function startAvSyncMonitor() {
+        if (avSyncMonitorActive) return;
+        avSyncMonitorActive = true;
+        setInterval(() => {
+            if (!video || !hls || video.paused || !isFinite(video.currentTime)) return;
+            const internalTime = hls.media ? hls.media.currentTime : null;
+            if (internalTime === null) return;
+            const diff = Math.abs(video.currentTime - internalTime);
+            if (diff > 2.5) {
+                const t = video.currentTime;
+                video.currentTime = Math.max(0, t - 0.001);
+            }
+        }, 3000);
+    }
     
     if (video) {
         video.addEventListener('playing', () => {
             updateStatus('Stream Active', true);
             showLoading(false);
+            startAvSyncMonitor();
         });
         video.addEventListener('pause', () => {
             updateStatus('Paused', false);
@@ -1141,10 +1240,6 @@ function initializePlayer() {
         
         videoWrapper.addEventListener('click', () => {
             videoWrapper.focus();
-        });
-        
-        videoWrapper.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
         });
         
         videoWrapper.setAttribute('tabindex', '0');
