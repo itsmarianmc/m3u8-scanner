@@ -594,7 +594,7 @@ function loadStream() {
         updateStatus('Not Supported', false);
     }
     
-    video.volume = 0.25;
+    video.volume = 1;
     updateVolumeIcon();
     updateButtonsState(true);
 }
