@@ -223,6 +223,8 @@
         	infoBtn, settingsBtn, settingsMenu, pipBtn, fullscreenBtn,
         	seekFeedback, statsOverlay, errorEl, loadingOverlay;
 
+        let prevVolume = 1; // gespeicherte Lautstärke vor dem Muten
+
         const videoSource = getParam('video_m3u8_src');
         const paramAutoplay = getParam('autoplay') === 'true';
         const paramMuted = getParam('muted') === null || getParam('muted') === 'true';
@@ -271,7 +273,7 @@
 
         function showVolumeFeedback(delta) {
         	clearTimeout(seekFeedbackTimeout);
-        	const cur = Math.round((video.muted ? 0 : video.volume) * 100);
+        	const cur = Math.round(video.volume * 100);
         	seekFeedback.innerHTML = `<div class="volume-text"><span>${cur}%</span></div>`;
         	seekFeedback.className = 'seek-feedback show volume-feedback';
         	seekFeedbackTimeout = setTimeout(() => seekFeedback.classList.remove('show'), 600);
@@ -280,8 +282,8 @@
         function updateVolumeIcon() {
         	if (!volumeBtn || !video) return;
         	const icon = volumeBtn.querySelector('i');
-        	const vol = video.muted ? 0 : video.volume * 100;
-        	if (vol === 0 || video.muted) icon.className = 'fas fa-volume-mute';
+        	const vol = video.volume * 100;
+        	if (vol === 0) icon.className = 'fas fa-volume-mute';
         	else if (vol < 50) icon.className = 'fas fa-volume-down';
         	else icon.className = 'fas fa-volume-up';
         }
@@ -499,8 +501,8 @@
         			document.getElementById('statRes').textContent =
         				`${video.videoWidth || '—'}×${video.videoHeight || '—'}`;
         			document.getElementById('statCodecs').textContent = detectCodec();
-        			document.getElementById('statVolume').textContent =
-        				`${Math.round((video.muted ? 0 : video.volume) * 100)}% / ${video.muted ? 'muted' : 'unmuted'}`;
+        			const vol = Math.round(video.volume * 100);
+        			document.getElementById('statVolume').textContent = `${vol}% / ${vol === 0 ? 'muted' : 'unmuted'}`;
 
         			if (hls && hls.bandwidthEstimate) {
         				const kbps = hls.bandwidthEstimate / 1024;
@@ -560,7 +562,7 @@
         		hls.on(Hls.Events.MANIFEST_PARSED, () => {
         			showLoading(false);
         			applyParamSettings();
-        			if (paramAutoskip && paramAutoskipInterval > 0) setupAutoSkip(paramAutoskipInt);
+        			if (paramAutoskip && paramAutoskipInt > 0) setupAutoSkip(paramAutoskipInt);
         			if (paramAutoplay) video.play().catch(e => console.log('Autoplay blocked:', e));
         			if (paramStartSkipToCurrent) setTimeout(() => goToLiveEdge(), 500);
         		});
@@ -605,9 +607,16 @@
         }
 
         function applyParamSettings() {
-        	video.volume = paramVolume;
-        	video.muted = paramMuted;
-        	if (volumeBar) volumeBar.value = paramVolume * 100;
+        	// Mute/Volume via URL-Parameter
+        	if (paramMuted) {
+        		video.volume = 0;
+        		prevVolume = paramVolume > 0 ? paramVolume : 1;
+        	} else {
+        		video.volume = paramVolume;
+        		prevVolume = video.volume > 0 ? video.volume : 1;
+        	}
+        	if (volumeBar) volumeBar.value = video.volume * 100;
+        	video.muted = false;
         	updateVolumeIcon();
 
         	if (paramControls === 'true') {
@@ -690,15 +699,27 @@
         	});
 
         	volumeBtn.addEventListener('click', () => {
-        		video.muted = !video.muted;
-        		updateVolumeIcon();
-        	});
-
-        	volumeBar.addEventListener('input', e => {
-        		video.volume = e.target.value / 100;
-        		video.muted = (video.volume === 0);
+        		if (video.volume > 0) {
+        			prevVolume = video.volume;
+        			video.volume = 0;
+        		} else {
+        			video.volume = prevVolume > 0 ? prevVolume : 1;
+        		}
+        		video.muted = false;
+        		if (volumeBar) volumeBar.value = video.volume * 100;
         		updateVolumeIcon();
         		showVolumeFeedback(0);
+        	});
+
+        	let oldVol = video.volume;
+        	volumeBar.addEventListener('input', e => {
+        		let newVol = e.target.value / 100;
+        		if (newVol > 0) prevVolume = newVol;
+        		video.volume = newVol;
+        		video.muted = false;
+        		updateVolumeIcon();
+        		showVolumeFeedback(newVol - oldVol);
+        		oldVol = newVol;
         	});
 
         	progressContainer.addEventListener('click', e => {
@@ -774,14 +795,18 @@
         				break;
         			case 'ArrowUp':
         				e.preventDefault();
-        				video.volume = Math.min(1, video.volume + 0.05);
+        				let volUp = Math.min(1, video.volume + 0.05);
+        				if (volUp > 0) prevVolume = volUp;
+        				video.volume = volUp;
         				if (volumeBar) volumeBar.value = video.volume * 100;
         				updateVolumeIcon();
         				showVolumeFeedback(0.05);
         				break;
         			case 'ArrowDown':
         				e.preventDefault();
-        				video.volume = Math.max(0, video.volume - 0.05);
+        				let volDown = Math.max(0, video.volume - 0.05);
+        				if (volDown > 0) prevVolume = volDown;
+        				video.volume = volDown;
         				if (volumeBar) volumeBar.value = video.volume * 100;
         				updateVolumeIcon();
         				showVolumeFeedback(-0.05);
