@@ -208,6 +208,8 @@
         let isLiveStream = false;
         let liveModeEnabled = true;
         const LIVE_EDGE_THRESHOLD = 11;
+        let fatalErrorCount = 0;
+        const MAX_FATAL_ERRORS = 3;
         let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
         let lastFrameTS = null;
@@ -223,7 +225,7 @@
         	infoBtn, settingsBtn, settingsMenu, pipBtn, fullscreenBtn,
         	seekFeedback, statsOverlay, errorEl, loadingOverlay;
 
-        let prevVolume = 1; // gespeicherte Lautstärke vor dem Muten
+        let prevVolume = 1;
 
         const videoSource = getParam('video_m3u8_src');
         const paramAutoplay = getParam('autoplay') === 'true';
@@ -273,8 +275,8 @@
 
         function showVolumeFeedback(delta) {
         	clearTimeout(seekFeedbackTimeout);
-        	const cur = Math.round(video.volume * 100);
-        	seekFeedback.innerHTML = `<div class="volume-text"><span>${cur}%</span></div>`;
+        	const cur = video.muted ? 0 : Math.round(video.volume * 100);
+        	seekFeedback.innerHTML = `<div class="volume-text"><span>${video.muted ? 'Muted' : cur + '%'}</span></div>`;
         	seekFeedback.className = 'seek-feedback show volume-feedback';
         	seekFeedbackTimeout = setTimeout(() => seekFeedback.classList.remove('show'), 600);
         }
@@ -282,9 +284,8 @@
         function updateVolumeIcon() {
         	if (!volumeBtn || !video) return;
         	const icon = volumeBtn.querySelector('i');
-        	const vol = video.volume * 100;
-        	if (vol === 0) icon.className = 'fas fa-volume-mute';
-        	else if (vol < 50) icon.className = 'fas fa-volume-down';
+        	if (video.muted || video.volume === 0) icon.className = 'fas fa-volume-mute';
+        	else if (video.volume < 0.5) icon.className = 'fas fa-volume-down';
         	else icon.className = 'fas fa-volume-up';
         }
 
@@ -502,7 +503,7 @@
         				`${video.videoWidth || '—'}×${video.videoHeight || '—'}`;
         			document.getElementById('statCodecs').textContent = detectCodec();
         			const vol = Math.round(video.volume * 100);
-        			document.getElementById('statVolume').textContent = `${vol}% / ${vol === 0 ? 'muted' : 'unmuted'}`;
+        			document.getElementById('statVolume').textContent = `${vol}% / ${video.muted || vol === 0 ? 'muted' : 'unmuted'}`;
 
         			if (hls && hls.bandwidthEstimate) {
         				const kbps = hls.bandwidthEstimate / 1024;
@@ -560,6 +561,7 @@
         		hls.attachMedia(video);
 
         		hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        			fatalErrorCount = 0;
         			showLoading(false);
         			applyParamSettings();
         			if (paramAutoskip && paramAutoskipInt > 0) setupAutoSkip(paramAutoskipInt);
@@ -575,12 +577,28 @@
 
         		hls.on(Hls.Events.ERROR, (e, data) => {
         			if (!data.fatal) return;
+        			e.preventDefault();
         			showLoading(false);
-        			if (data.type === Hls.ErrorTypes.NETWORK_ERROR) showError('Network error loading stream');
-        			else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
-        				showError('Media error – recovering…');
-        				hls.recoverMediaError();
-        			} else showError('Fatal error loading stream');
+        			if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+        				if (fatalErrorCount < MAX_FATAL_ERRORS) {
+        					fatalErrorCount++;
+        					showError(`Network error – retrying (${fatalErrorCount}/${MAX_FATAL_ERRORS})…`);
+        					setTimeout(() => hls.startLoad(), 1000 * fatalErrorCount);
+        				} else {
+        					showError('Network error loading stream');
+        				}
+        			} else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+        				if (fatalErrorCount < MAX_FATAL_ERRORS) {
+        					fatalErrorCount++;
+        					showError('Media error – recovering…');
+        					hls.recoverMediaError();
+        					hls.startLoad();
+        				} else {
+        					showError('Media error – could not recover');
+        				}
+        			} else {
+        				showError('Fatal error loading stream');
+        			}
         		});
 
         	} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
@@ -607,16 +625,16 @@
         }
 
         function applyParamSettings() {
-        	// Mute/Volume via URL-Parameter
         	if (paramMuted) {
-        		video.volume = 0;
-        		prevVolume = paramVolume > 0 ? paramVolume : 1;
+        		video.muted = true;
+        		video.volume = paramVolume > 0 ? paramVolume : 1;
+        		prevVolume = video.volume;
         	} else {
+        		video.muted = false;
         		video.volume = paramVolume;
         		prevVolume = video.volume > 0 ? video.volume : 1;
         	}
         	if (volumeBar) volumeBar.value = video.volume * 100;
-        	video.muted = false;
         	updateVolumeIcon();
 
         	if (paramControls === 'true') {
@@ -699,13 +717,13 @@
         	});
 
         	volumeBtn.addEventListener('click', () => {
-        		if (video.volume > 0) {
-        			prevVolume = video.volume;
-        			video.volume = 0;
-        		} else {
+        		if (video.muted || video.volume === 0) {
+        			video.muted = false;
         			video.volume = prevVolume > 0 ? prevVolume : 1;
+        		} else {
+        			prevVolume = video.volume;
+        			video.muted = true;
         		}
-        		video.muted = false;
         		if (volumeBar) volumeBar.value = video.volume * 100;
         		updateVolumeIcon();
         		showVolumeFeedback(0);
@@ -798,6 +816,7 @@
         				let volUp = Math.min(1, video.volume + 0.05);
         				if (volUp > 0) prevVolume = volUp;
         				video.volume = volUp;
+        				video.muted = false;
         				if (volumeBar) volumeBar.value = video.volume * 100;
         				updateVolumeIcon();
         				showVolumeFeedback(0.05);
